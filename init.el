@@ -1,14 +1,27 @@
 ;; Load package manager
 (require 'package)
 
+
 ; list the packages you want
-(setq package-list '(leuven-theme google-this ivy-hydra ivy-bibtex swiper counsel-gtags counsel-projectile counsel ivy jedi haskell-mode ensime sbt-mode ein applescript-mode zone-nyan zenburn-theme yaml-mode xterm-keybinder web-mode undo-tree sunny-day-theme spotify spacemacs-theme smartparens selectric-mode sane-term request-deferred realgud pos-tip org nyan-mode names multiple-cursors monokai-theme matlab-mode magit list-utils light-soap-theme kv json-mode ipython function-args flycheck exec-path-from-shell elpy elm-yasnippets elm-mode cuda-mode company-jedi company-irony company-cmake company-c-headers company-auctex cmake-mode buffer-move anaphora))
+(setq package-list '(leuven-theme google-this ivy-hydra
+                                  ivy-bibtex swiper counsel-gtags counsel-projectile counsel ivy
+                                  jedi haskell-mode ensime sbt-mode ein applescript-mode zone-nyan
+                                  zenburn-theme yaml-mode xterm-keybinder web-mode undo-tree
+                                  sunny-day-theme spotify spacemacs-theme smartparens
+                                  selectric-mode sane-term request-deferred realgud pos-tip org
+                                  nyan-mode names multiple-cursors monokai-theme matlab-mode magit
+                                  list-utils light-soap-theme kv json-mode ipython function-args
+                                  flycheck exec-path-from-shell elpy elm-yasnippets elm-mode
+                                  cuda-mode company-jedi company-irony company-cmake
+                                  company-c-headers company-auctex cmake-mode buffer-move
+                                  anaphora))
 
 ;; ;; Add the Marmalade repo
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives
              '("melpa-unstable" . "https://melpa.org/packages/") t)
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
 ; activate all the packages (in particular autoloads)
 (package-initialize)
@@ -171,7 +184,7 @@
  '(custom-enabled-themes (quote (leuven)))
  '(custom-safe-themes
    (quote
-    ("bf64dd3657eef02b3b5f7439d452c7b18f4b5c1e717e6037c8f2b61b9b3dbcf8" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "40f6a7af0dfad67c0d4df2a1dd86175436d79fc69ea61614d668a635c2cd94ab" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "b9183de9666c3a16a7ffa7faaa8e9941b8d0ab50f9aaba1ca49f2f3aec7e3be9" "efb148b9a120f417464713fe6cad47eb708dc45c7f2dbfeea4a7ec329214e63e" "e80932ca56b0f109f8545576531d3fc79487ca35a9a9693b62bf30d6d08c9aaf" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "60f04e478dedc16397353fb9f33f0d895ea3dab4f581307fbf0aa2f07e658a40" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "9370aeac615012366188359cb05011aea721c73e1cb194798bc18576025cabeb" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" default)))
+    ("ad9747dc51ca23d1c1382fa9bd5d76e958a5bfe179784989a6a666fe801aadf2" "807a7f4c2d0d331fc1798e6d38b890ce3582096b8d622ba3b491b2aa4345e962" "bf64dd3657eef02b3b5f7439d452c7b18f4b5c1e717e6037c8f2b61b9b3dbcf8" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "40f6a7af0dfad67c0d4df2a1dd86175436d79fc69ea61614d668a635c2cd94ab" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "b9183de9666c3a16a7ffa7faaa8e9941b8d0ab50f9aaba1ca49f2f3aec7e3be9" "efb148b9a120f417464713fe6cad47eb708dc45c7f2dbfeea4a7ec329214e63e" "e80932ca56b0f109f8545576531d3fc79487ca35a9a9693b62bf30d6d08c9aaf" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "60f04e478dedc16397353fb9f33f0d895ea3dab4f581307fbf0aa2f07e658a40" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "9370aeac615012366188359cb05011aea721c73e1cb194798bc18576025cabeb" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" default)))
  '(doc-view-resolution 600)
  '(fci-rule-color "#efefef" t)
  '(magit-revert-buffers t t)
@@ -180,7 +193,7 @@
     ("#336c6c" "#205070" "#0f2050" "#806080" "#401440" "#6c1f1c" "#6b400c" "#23733c")))
  '(package-selected-packages
    (quote
-    (leuven-theme google-this ivy-hydra ivy-bibtex swiper counsel-gtags counsel-projectile counsel ivy jedi haskell-mode ensime sbt-mode ein applescript-mode zone-nyan zenburn-theme yaml-mode xterm-keybinder web-mode undo-tree sunny-day-theme spotify spacemacs-theme smartparens selectric-mode sane-term request-deferred realgud pos-tip org nyan-mode names multiple-cursors monokai-theme matlab-mode magit list-utils light-soap-theme kv json-mode ipython function-args flycheck exec-path-from-shell elpy elm-yasnippets elm-mode cuda-mode company-jedi company-irony company-cmake company-c-headers company-auctex cmake-mode buffer-move anaphora)))
+    (org-plus-contrib gnuplot gnuplot-mode leuven-theme google-this ivy-hydra ivy-bibtex swiper counsel-gtags counsel-projectile counsel ivy jedi haskell-mode ensime sbt-mode ein applescript-mode zone-nyan zenburn-theme yaml-mode xterm-keybinder web-mode undo-tree sunny-day-theme spotify spacemacs-theme smartparens selectric-mode sane-term request-deferred realgud pos-tip org nyan-mode names multiple-cursors monokai-theme matlab-mode magit list-utils light-soap-theme kv json-mode ipython function-args flycheck exec-path-from-shell elpy elm-yasnippets elm-mode cuda-mode company-jedi company-irony company-cmake company-c-headers company-auctex cmake-mode buffer-move anaphora)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
  '(projectile-switch-project-action (quote projectile-vc))
@@ -295,6 +308,9 @@
 
 (add-hook 'elm-mode-hook '(lambda ()
                             (smartparens-mode)
+                            (company-mode)
+                            (make-local-variable 'company-backends)
+                            ;; (setq company-backends '(company-elm))
                             ))
 
 (global-set-key (kbd "M-p") 'backward-paragraph)
@@ -502,8 +518,6 @@
 (global-set-key [mouse-9] 'up-slightly)
 
 
-(setq org-image-actual-width '(400))
-
 (setq vc-ignore-dir-regexp
       (format "\\(%s\\)\\|\\(%s\\)"
               vc-ignore-dir-regexp
@@ -556,3 +570,17 @@
 (global-set-key (kbd "C-c i") 'counsel-imenu)
 (global-set-key (kbd "C-c b") 'ivy-bibtex)
 (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
+
+(setq org-confirm-babel-evaluate nil
+      org-src-fontify-natively t
+      org-src-tab-acts-natively t
+      org-image-actual-width 400)
+
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "M-/") 'hippie-expand)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+
+(global-set-key (kbd "C-s") 'isearch-forward-regexp)
+(global-set-key (kbd "C-r") 'isearch-backward-regexp)
+(global-set-key (kbd "C-M-s") 'isearch-forward)
+(global-set-key (kbd "C-M-r") 'isearch-backward)
