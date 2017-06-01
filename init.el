@@ -3,18 +3,15 @@
 
 
 ; list the packages you want
-(setq package-list '(leuven-theme google-this ivy-hydra
-                                  ivy-bibtex swiper counsel-gtags counsel-projectile counsel ivy
-                                  jedi haskell-mode ensime sbt-mode ein applescript-mode zone-nyan
-                                  zenburn-theme yaml-mode xterm-keybinder web-mode undo-tree
-                                  sunny-day-theme spotify spacemacs-theme smartparens
-                                  selectric-mode sane-term request-deferred realgud pos-tip org
-                                  nyan-mode names multiple-cursors monokai-theme matlab-mode magit
-                                  list-utils light-soap-theme kv json-mode ipython function-args
-                                  flycheck exec-path-from-shell elpy elm-yasnippets elm-mode
-                                  cuda-mode company-jedi company-irony company-cmake
-                                  company-c-headers company-auctex cmake-mode buffer-move
-                                  anaphora))
+(setq package-list '(leuven-theme google-this ivy-hydra ivy-bibtex swiper counsel-gtags
+                     counsel-projectile counsel ivy jedi haskell-mode ensime sbt-mode ein
+                     applescript-mode zone-nyan zenburn-theme yaml-mode xterm-keybinder web-mode
+                     undo-tree sunny-day-theme spotify spacemacs-theme smartparens selectric-mode
+                     sane-term request-deferred realgud pos-tip org nyan-mode names multiple-cursors
+                     monokai-theme matlab-mode magit list-utils light-soap-theme kv json-mode
+                     ipython function-args flycheck exec-path-from-shell elpy elm-yasnippets
+                     elm-mode cuda-mode company-jedi company-irony company-cmake company-c-headers
+                     company-auctex cmake-mode buffer-move anaphora))
 
 ;; Add the Marmalade repo
 (add-to-list 'package-archives
@@ -36,16 +33,16 @@
     (package-install package)))
 
 
-
 ;; Get rid of everything.
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (tooltip-mode -1)
+(blink-cursor-mode)
+(setq-default cursor-type 'box)
 (defun no-bell ())
 (setq ring-bell-function 'no-bell)
 (setq visible-bell nil)
-(setq-default cursor-type 'box)
 (setq ns-pop-up-frames 'nil)
 
 
@@ -58,32 +55,33 @@
 (setq TeX-source-correlate-start-server t)
 (setq-default fill-column 100)
 (setq TeX-PDF-mode t)
-(setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
 (setenv "PATH" (concat (getenv "HOME") "/bin:" (getenv "PATH")))
+(setenv "PATH" (concat (getenv "HOME") ".miniconda2/bin:" (getenv "PATH")))
+(setenv "PATH" (concat "/usr/local/bin:" (getenv "PATH")))
 (setenv "PATH" (concat "/Library/TeX/texbin:" (getenv "PATH")))
+(add-to-list 'exec-path (concat (getenv "HOME") ".miniconda2/bin"))
 (add-to-list 'exec-path "/usr/local/bin")
 (add-to-list 'exec-path "/Library/TeX/texbin")
 (add-to-list 'exec-path (concat (getenv "HOME") "/bin"))
 ;; Use variable width font faces in current buffer
- (defun my-buffer-face-mode-variable ()
-   "Set font to a variable width (proportional) fonts in current buffer"
-   (interactive)
-   (setq buffer-face-mode-face '(:family "CMU Serif" :height 200 :width normal))
-   (buffer-face-mode))
+(defun my-buffer-face-mode-variable ()
+  "Set font to a variable width (proportional) fonts in current buffer"
+  (interactive)
+  (setq buffer-face-mode-face '(:family "CMU Serif" :height 200 :width normal))
+  (buffer-face-mode))
 
 (add-hook 'TeX-mode-hook '(lambda ()
                             (company-mode)
                             (make-local-variable 'company-backends)
                             (company-auctex-init)
-                            (my-buffer-face-mode-variable))
-          )
+                            (my-buffer-face-mode-variable)))
 
 ;; Let me kill buffers and downcase shit
 (put 'erase-buffer 'disabled nil)
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
 
-(setq backup-directory-alist `(("." . "~/.saves")))
+(setq backup-directory-alist `(("." . "~/.emacs.d/saves")))
 (setq delete-old-versions t
       kept-new-versions 6
       kept-old-versions 2
@@ -180,23 +178,39 @@
    (quote
     (company-gtags company-irony company-jedi company-css company-elm company-clang company-xcode company-cmake company-capf
                    (company-dabbrev-code company-gtags company-etags company-keywords)
-                   company-oddmuse company-files company-dabbrev)))
+                   company-oddmuse company-files)))
+ '(compilation-message-face (quote default))
  '(custom-enabled-themes (quote (leuven)))
  '(custom-safe-themes
    (quote
-    ("ad9747dc51ca23d1c1382fa9bd5d76e958a5bfe179784989a6a666fe801aadf2" "807a7f4c2d0d331fc1798e6d38b890ce3582096b8d622ba3b491b2aa4345e962" "bf64dd3657eef02b3b5f7439d452c7b18f4b5c1e717e6037c8f2b61b9b3dbcf8" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "40f6a7af0dfad67c0d4df2a1dd86175436d79fc69ea61614d668a635c2cd94ab" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "b9183de9666c3a16a7ffa7faaa8e9941b8d0ab50f9aaba1ca49f2f3aec7e3be9" "efb148b9a120f417464713fe6cad47eb708dc45c7f2dbfeea4a7ec329214e63e" "e80932ca56b0f109f8545576531d3fc79487ca35a9a9693b62bf30d6d08c9aaf" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "60f04e478dedc16397353fb9f33f0d895ea3dab4f581307fbf0aa2f07e658a40" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "9370aeac615012366188359cb05011aea721c73e1cb194798bc18576025cabeb" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" default)))
+    ("d5f17ae86464ef63c46ed4cb322703d91e8ed5e718bf5a7beb69dd63352b26b2" "a0dc0c1805398db495ecda1994c744ad1a91a9455f2a17b59b716f72d3585dde" "ad9747dc51ca23d1c1382fa9bd5d76e958a5bfe179784989a6a666fe801aadf2" "807a7f4c2d0d331fc1798e6d38b890ce3582096b8d622ba3b491b2aa4345e962" "bf64dd3657eef02b3b5f7439d452c7b18f4b5c1e717e6037c8f2b61b9b3dbcf8" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "40f6a7af0dfad67c0d4df2a1dd86175436d79fc69ea61614d668a635c2cd94ab" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "b9183de9666c3a16a7ffa7faaa8e9941b8d0ab50f9aaba1ca49f2f3aec7e3be9" "efb148b9a120f417464713fe6cad47eb708dc45c7f2dbfeea4a7ec329214e63e" "e80932ca56b0f109f8545576531d3fc79487ca35a9a9693b62bf30d6d08c9aaf" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "60f04e478dedc16397353fb9f33f0d895ea3dab4f581307fbf0aa2f07e658a40" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "9370aeac615012366188359cb05011aea721c73e1cb194798bc18576025cabeb" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" default)))
  '(doc-view-resolution 600)
  '(fci-rule-color "#efefef" t)
+ '(highlight-changes-colors (quote ("#FD5FF0" "#AE81FF")))
+ '(highlight-tail-colors
+   (quote
+    (("#3C3D37" . 0)
+     ("#679A01" . 20)
+     ("#4BBEAE" . 30)
+     ("#1DB4D0" . 50)
+     ("#9A8F21" . 60)
+     ("#A75B00" . 70)
+     ("#F309DF" . 85)
+     ("#3C3D37" . 100))))
+ '(magit-diff-use-overlays nil)
  '(magit-revert-buffers t t)
  '(nrepl-message-colors
    (quote
     ("#336c6c" "#205070" "#0f2050" "#806080" "#401440" "#6c1f1c" "#6b400c" "#23733c")))
+ '(ns-use-native-fullscreen nil)
+ '(org-babel-load-languages (quote ((emacs-lisp . t) (shell . t) (gnuplot . t))))
  '(package-selected-packages
    (quote
-    (org-plus-contrib gnuplot gnuplot-mode leuven-theme google-this ivy-hydra ivy-bibtex swiper counsel-gtags counsel-projectile counsel ivy jedi haskell-mode ensime sbt-mode ein applescript-mode zone-nyan zenburn-theme yaml-mode xterm-keybinder web-mode undo-tree sunny-day-theme spotify spacemacs-theme smartparens selectric-mode sane-term request-deferred realgud pos-tip org nyan-mode names multiple-cursors monokai-theme matlab-mode magit list-utils light-soap-theme kv json-mode ipython function-args flycheck exec-path-from-shell elpy elm-yasnippets elm-mode cuda-mode company-jedi company-irony company-cmake company-c-headers company-auctex cmake-mode buffer-move anaphora)))
+    (counsel-spotify spotify org-download org-plus-contrib gnuplot gnuplot-mode leuven-theme google-this ivy-hydra ivy-bibtex swiper counsel-gtags counsel-projectile counsel ivy jedi haskell-mode ensime sbt-mode ein applescript-mode zone-nyan zenburn-theme yaml-mode xterm-keybinder web-mode undo-tree sunny-day-theme spacemacs-theme smartparens selectric-mode sane-term request-deferred realgud pos-tip org nyan-mode names multiple-cursors monokai-theme matlab-mode magit list-utils light-soap-theme kv json-mode ipython function-args flycheck exec-path-from-shell elpy elm-yasnippets elm-mode cuda-mode company-jedi company-irony company-cmake company-c-headers company-auctex cmake-mode buffer-move anaphora)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
  '(projectile-switch-project-action (quote projectile-vc))
+ '(recentf-exclude (quote ("\\.emacs.d.*")))
  '(red "#ffffff")
  '(request-backend (quote url-retrieve))
  '(sane-term-shell-command "/usr/local/bin/bash")
@@ -224,7 +238,9 @@
      (320 . "#8CD0D3")
      (340 . "#94BFF3")
      (360 . "#DC8CC3"))))
- '(vc-annotate-very-old-color "#DC8CC3"))
+ '(vc-annotate-very-old-color "#DC8CC3")
+ '(weechat-color-list
+   (unspecified "#272822" "#3C3D37" "#F70057" "#F92672" "#86C30D" "#A6E22E" "#BEB244" "#E6DB74" "#40CAE4" "#66D9EF" "#FB35EA" "#FD5FF0" "#74DBCD" "#A1EFE4" "#F8F8F2" "#F8F8F0")))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -239,14 +255,10 @@
    nil 'fullscreen
    (when (not (frame-parameter nil 'fullscreen)) 'fullboth)))
 
-;; mac set keys and things
+;; mac specific shit
 (when (equal system-type 'darwin)
-  (setq mac-option-modifier 'meta) ;; Bind meta to ALT
-  (setq mac-command-modifier 'super) ;; Bind apple/command to  super if you want
-  (setq mac-function-modifier 'hyper)
-  (setq ns-use-native-fullscreen nil)
-  (require 'ls-lisp)
-  (setq ls-lisp-use-insert-directory-program nil)
+  ;; requires coreutils ('brew install coreutils', silly)
+  (setq insert-directory-program "/usr/local/bin/gls")
   )
 
 (require 'multiple-cursors)
@@ -313,10 +325,8 @@
                             ;; (setq company-backends '(company-elm))
                             ))
 
-(global-set-key (kbd "M-p") 'backward-paragraph)
-(global-set-key (kbd "M-n") 'forward-paragraph)
-
 (projectile-global-mode)
+
 
 (eval-after-load 'company
   '(progn
@@ -343,11 +353,6 @@
   (interactive "nTransparency Value 0 - 100 opaque:")
   (set-frame-parameter (selected-frame) 'alpha value))
 (transparency 100)
-
-(global-set-key [f7] 'spotify-previous)
-(global-set-key [f8] 'spotify-next)
-(global-set-key [f9] 'toggle-window-dedicated)
-(global-set-key [f12] 'toggle-fullscreen)
 
 ;; I don't want to be warned about discarding undo info.
 (unless (boundp 'warning-suppress-types)
@@ -380,10 +385,8 @@
                       (if (>= (current-column) 80)
                           'mode-line-80col-face
                         'mode-line-position-face)))
-                                        ; emacsclient [default -- keep?]
-                                        ;   mode-line-client
    " "
-                                        ; read-only or modified status
+   ;; read-only or modified status
    (:eval
     (cond (buffer-read-only
            (propertize " RO " 'face 'mode-line-read-only-face))
@@ -391,26 +394,26 @@
            (propertize " ** " 'face 'mode-line-modified-face))
           (t "  ")))
    " "
-                                        ; directory and buffer/file name
+
+   ;; directory and buffer/file name
    (:propertize (:eval (shorten-directory default-directory 30))
                 face mode-line-folder-face)
    (:propertize "%b"
                 face mode-line-filename-face)
-                                        ; narrow [default -- keep?]
+   ;; narrow [default -- keep?]
    " %n "
-                                        ; mode indicators: vc, recursive edit, major mode, minor modes, process, global
+   ;; mode indicators: vc, recursive edit, major mode, minor modes, process, global
    (vc-mode vc-mode)
    "  %["
    (:propertize mode-name
                 face mode-line-mode-face)
    "%] "
-   ;; (:eval (propertize (format-mode-line minor-mode-alist)
-   ;;                    'face 'mode-line-minor-mode-face))
+
    (:propertize mode-line-process
                 face mode-line-process-face)
    (global-mode-string global-mode-string)
    "  "
-                                        ; nyan-mode uses nyan cat as an alternative to %p
+   ;; nyan-mode uses nyan cat as an alternative to %p
    (:eval (when nyan-mode (list (nyan-create))))
    ))
 
@@ -481,35 +484,6 @@
                     :inherit 'mode-line-position-face
                     :foreground "black" :background "#eab700")
 
-(defun my-insert-file-name (filename &optional args)
-  "Insert name of file FILENAME into buffer after point.
-
-  Prefixed with \\[universal-argument], expand the file name to
-  its fully canocalized path.  See `expand-file-name'.
-
-  Prefixed with \\[negative-argument], use relative path to file
-  name from current directory, `default-directory'.  See
-  `file-relative-name'.
-
-  The default with no prefix is to insert the file name exactly as
-  it appears in the minibuffer prompt."
-  ;; Based on insert-file in Emacs -- ashawley 20080926
-  (interactive "*fInsert file name: \nP")
-  (cond ((eq '- args)
-         (insert (file-relative-name filename)))
-        ((not (null args))
-         (insert (expand-file-name filename)))
-        (t
-         (insert filename))))
-
-(global-set-key "\C-c\C-i" 'my-insert-file-name)
-
-
-;; ;; Stupid stupid things
-;; (nyan-mode 't)
-
-;;(benchmark-init/deactivate)
-
 
 ;; ===== Scrolling fix for advanced mouses =============================
 (defun up-slightly () (interactive) (scroll-up 3))
@@ -569,13 +543,116 @@
 (global-set-key (kbd "C-x l") 'counsel-locate)
 (global-set-key (kbd "C-c i") 'counsel-imenu)
 (global-set-key (kbd "C-c b") 'ivy-bibtex)
+(ivy-add-actions t
+                 '(("I" (lambda (x) (with-ivy-window (insert x))) "insert")))
+(ivy-add-actions 'counsel-find-file
+                 '(("F" (lambda (x) (with-ivy-window (insert (file-relative-name x))))
+                    "insert relative file name")
+                   ("B" (lambda (x)
+                          (with-ivy-window
+                            (insert (file-name-nondirectory (replace-regexp-in-string "/\\'" "" x)))))
+                    "insert file name without any directory information")))
 (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
+(eval-after-load "swiper"
+  '(progn
+     (define-key swiper-map (kbd "C-.")
+       (lambda () (interactive) (insert (format "\\<%s\\>" (with-ivy-window (thing-at-point 'symbol))))))
+     (define-key swiper-map (kbd "M-.")
+       (lambda () (interactive) (insert (format "\\<%s\\>" (with-ivy-window (thing-at-point 'word))))))
+     ))
 
 (setq org-confirm-babel-evaluate nil
       org-src-fontify-natively t
       org-src-tab-acts-natively t
-      org-image-actual-width 400)
+      org-image-actual-width 600)
+
+(with-eval-after-load 'ox-latex
+  (add-to-list 'org-latex-classes
+               '("revtex4-1"
+                 "\\documentclass{revtex4-1}"
+                 ("\\section{%s}" . "\\section*{%s}"))))
+
+(require 'org-download)
+(add-hook 'org-mode-hook
+          '(lambda ()
+             (if (buffer-file-name) 
+               (setq org-download-image-dir
+                     (concat (file-name-sans-extension (buffer-file-name)) "-org-images"))
+               (setq org-download-image-dir "org-images")
+               )
+             )
+          )
+
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "M-/") 'hippie-expand)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
+
+(add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
+
+(global-set-key [f5] '(lambda () (interactive) (eshell 't)))
+(global-set-key [f6] 'google-this-search)
+(global-set-key [f7] 'spotify-previous)
+(global-set-key [f8] 'spotify-next)
+(global-set-key [f9] 'toggle-window-dedicated)
+(global-set-key [f12] 'toggle-fullscreen)
+
+;; inline most image types in org-mode via the 'convert' utility
+(with-eval-after-load "org"
+  (setq image-file-name-extensions
+        (quote
+         ("png" "jpeg" "jpg" "gif" "tiff" "tif" "xbm" "xpm" "pbm" "pgm" "ppm" "pnm" "svg" "pdf" "bmp")))
+  
+  (setq org-image-actual-width 600)
+  
+  (setq org-imagemagick-display-command "convert -density 600 \"%s\" -thumbnail \"%sx%s>\" \"%s\"")
+  
+  (defun org-display-inline-images (&optional include-linked refresh beg end)
+    "Display inline images.
+Normally only links without a description part are inlined, because this
+is how it will work for export.  When INCLUDE-LINKED is set, also links
+with a description part will be inlined.  This
+can be nice for a quick
+look at those images, but it does not reflect what exported files will look
+like.
+When REFRESH is set, refresh existing images between BEG and END.
+This will create new image displays only if necessary.
+BEG and END default to the buffer boundaries."
+    (interactive "P")
+    (unless refresh
+      (org-remove-inline-images)
+      (if (fboundp 'clear-image-cache) (clear-image-cache)))
+    (save-excursion
+      (save-restriction
+        (widen)
+        (setq beg (or beg (point-min)) end (or end (point-max)))
+        (goto-char beg)
+        (let ((re (concat "\\[\\[\\(\\(file:\\)\\|\\([./~]\\)\\)\\([^]\n]+?"
+                          (substring (org-image-file-name-regexp) 0 -2)
+                          "\\)\\]" (if include-linked "" "\\]")))
+              old file ov img)
+          (while (re-search-forward re end t)
+            (setq old (get-char-property-and-overlay (match-beginning 1)
+                                                     'org-image-overlay)
+                  file (expand-file-name
+                        (concat (or (match-string 3) "") (match-string 4))))
+            (when (file-exists-p file)
+              (let ((file-thumb (format "%s%s_thumb.png" (file-name-directory file) (file-name-base file))))
+                (if (file-exists-p file-thumb)
+                    (let ((thumb-time (nth 5 (file-attributes file-thumb 'string)))
+                          (file-time (nth 5 (file-attributes file 'string))))
+                      (if (time-less-p thumb-time file-time)
+                          (shell-command (format org-imagemagick-display-command
+                                                 file org-image-actual-width org-image-actual-width file-thumb) nil nil)))
+                  (shell-command (format org-imagemagick-display-command
+                                         file org-image-actual-width org-image-actual-width file-thumb) nil nil))
+                (if (and (car-safe old) refresh)
+                    (image-refresh (overlay-get (cdr old) 'display))
+                  (setq img (save-match-data (create-image file-thumb)))
+                  (when img
+                    (setq ov (make-overlay (match-beginning 0) (match-end 0)))
+                    (overlay-put ov 'display img)
+                    (overlay-put ov 'face 'default)
+                    (overlay-put ov 'org-image-overlay t)
+                    (overlay-put ov 'modification-hooks
+                                 (list 'org-display-inline-remove-overlay))
+                    (push ov org-inline-image-overlays)))))))))))
