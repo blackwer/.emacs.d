@@ -4,10 +4,10 @@
 
 ; list the packages you want
 (setq package-list '(leuven-theme google-this ivy-hydra ivy-bibtex swiper counsel-gtags
-                     counsel-projectile counsel ivy jedi haskell-mode ensime sbt-mode ein
+                     counsel ivy jedi haskell-mode ensime sbt-mode ein
                      applescript-mode zone-nyan zenburn-theme yaml-mode xterm-keybinder web-mode
                      undo-tree sunny-day-theme spotify spacemacs-theme smartparens selectric-mode
-                     sane-term request-deferred realgud pos-tip org nyan-mode names multiple-cursors
+                     request-deferred realgud pos-tip org nyan-mode names multiple-cursors
                      monokai-theme matlab-mode magit list-utils light-soap-theme kv json-mode
                      ipython function-args flycheck exec-path-from-shell elpy elm-yasnippets
                      elm-mode cuda-mode company-jedi company-irony company-cmake company-c-headers
@@ -32,6 +32,7 @@
   (unless (package-installed-p package)
     (package-install package)))
 
+(add-to-list 'load-path "~/.emacs.d/lisp/")
 
 ;; Get rid of everything.
 (tool-bar-mode -1)
@@ -51,6 +52,7 @@
 (add-hook 'tex-mode-hook 'auto-fill-mode)
 (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
 (add-hook 'LaTeX-mode-hook 'tex-fold-mode)
+(add-hook 'LaTeX-mode-hook 'smartparens-mode)
 (setq TeX-source-correlate-method 'synctex)
 (setq TeX-source-correlate-start-server t)
 (setq-default fill-column 100)
@@ -206,7 +208,7 @@
  '(org-babel-load-languages (quote ((emacs-lisp . t) (shell . t) (gnuplot . t))))
  '(package-selected-packages
    (quote
-    (counsel-spotify spotify org-download org-plus-contrib gnuplot gnuplot-mode leuven-theme google-this ivy-hydra ivy-bibtex swiper counsel-gtags counsel-projectile counsel ivy jedi haskell-mode ensime sbt-mode ein applescript-mode zone-nyan zenburn-theme yaml-mode xterm-keybinder web-mode undo-tree sunny-day-theme spacemacs-theme smartparens selectric-mode sane-term request-deferred realgud pos-tip org nyan-mode names multiple-cursors monokai-theme matlab-mode magit list-utils light-soap-theme kv json-mode ipython function-args flycheck exec-path-from-shell elpy elm-yasnippets elm-mode cuda-mode company-jedi company-irony company-cmake company-c-headers company-auctex cmake-mode buffer-move anaphora)))
+    (fortpy counsel-spotify spotify org-download org-plus-contrib gnuplot gnuplot-mode leuven-theme google-this ivy-hydra ivy-bibtex swiper counsel-gtags counsel ivy jedi haskell-mode ensime sbt-mode ein applescript-mode zone-nyan zenburn-theme yaml-mode xterm-keybinder web-mode undo-tree sunny-day-theme spacemacs-theme smartparens selectric-mode request-deferred realgud pos-tip org nyan-mode names multiple-cursors monokai-theme matlab-mode magit list-utils light-soap-theme kv json-mode ipython function-args flycheck exec-path-from-shell elpy elm-yasnippets elm-mode cuda-mode company-jedi company-irony company-cmake company-c-headers company-auctex cmake-mode buffer-move anaphora)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
  '(projectile-switch-project-action (quote projectile-vc))
@@ -262,10 +264,7 @@
   )
 
 (require 'multiple-cursors)
-(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-(global-set-key (kbd "C->") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+
 
 (defadvice pop-to-buffer (before cancel-other-window first)
   (ad-set-arg 1 nil))
@@ -283,9 +282,6 @@
      "Window '%s' is normal")
    (current-buffer)))
 
-(require 'sane-term)
-(global-set-key (kbd "C-x t") 'sane-term)
-(global-set-key (kbd "C-x T") 'sane-term-create)
 
 (show-paren-mode 1)
 (setq-default c-basic-offset 4)
@@ -325,7 +321,18 @@
                             ;; (setq company-backends '(company-elm))
                             ))
 
-(projectile-global-mode)
+
+;; Standard fortpy.el setting
+(require 'fortran-tags)
+(add-hook 'f90-mode-hook '(lambda ()
+                            (fortpy-setup)
+                            (fortran-tags-mode)
+                            ))
+(setq fortpy-complete-on-percent t)
+(setq fortpy-complete-on-bracket t)
+(setq f90-if-indent 2)
+(setq f90-do-indent 2)
+(setq f90-type-indent 2)
 
 
 (eval-after-load 'company
@@ -543,6 +550,20 @@
 (global-set-key (kbd "C-x l") 'counsel-locate)
 (global-set-key (kbd "C-c i") 'counsel-imenu)
 (global-set-key (kbd "C-c b") 'ivy-bibtex)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+(global-set-key (kbd "C-x t") 'eshell)
+(global-set-key (kbd "C-x T") '(lambda () (interactive) (eshell 't)))
+(global-set-key [f6] 'google-this-search)
+(global-set-key [f7] 'spotify-previous)
+(global-set-key [f8] 'spotify-next)
+(global-set-key [f9] 'toggle-window-dedicated)
+(global-set-key [f10] 'org-capture)
+(global-set-key [f12] 'toggle-fullscreen)
+
 (ivy-add-actions t
                  '(("I" (lambda (x) (with-ivy-window (insert x))) "insert")))
 (ivy-add-actions 'counsel-find-file
@@ -584,17 +605,10 @@
           )
 
 
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-(global-set-key (kbd "M-/") 'hippie-expand)
+
 
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
 
-(global-set-key [f5] '(lambda () (interactive) (eshell 't)))
-(global-set-key [f6] 'google-this-search)
-(global-set-key [f7] 'spotify-previous)
-(global-set-key [f8] 'spotify-next)
-(global-set-key [f9] 'toggle-window-dedicated)
-(global-set-key [f12] 'toggle-fullscreen)
 
 ;; inline most image types in org-mode via the 'convert' utility
 (with-eval-after-load "org"
@@ -656,3 +670,10 @@ BEG and END default to the buffer boundaries."
                     (overlay-put ov 'modification-hooks
                                  (list 'org-display-inline-remove-overlay))
                     (push ov org-inline-image-overlays)))))))))))
+
+
+(setq org-capture-templates
+      '(("t" "Todo" entry (file+headline "~/org/todo.org" "Tasks")
+         "* TODO %?\n  %i\n  %a")
+        ("j" "Journal" entry (file+datetree "~/org/journal.org")
+         "* %?\nEntered on %U\n  %i\n  %a")))
