@@ -11,7 +11,7 @@
                      monokai-theme matlab-mode magit list-utils light-soap-theme kv json-mode
                      ipython function-args flycheck exec-path-from-shell elpy elm-yasnippets
                      elm-mode cuda-mode company-jedi company-irony company-cmake company-c-headers
-                     company-auctex cmake-mode buffer-move anaphora))
+                     company-auctex cmake-mode buffer-move anaphora org org-download))
 
 ;; Add the Marmalade repo
 (add-to-list 'package-archives
