@@ -55,7 +55,7 @@
 (add-hook 'LaTeX-mode-hook 'smartparens-mode)
 (setq TeX-source-correlate-method 'synctex)
 (setq TeX-source-correlate-start-server t)
-(setq-default fill-column 100)
+(setq-default fill-column 95)
 (setq TeX-PDF-mode t)
 (setenv "PATH" (concat (getenv "HOME") "/bin:" (getenv "PATH")))
 (setenv "PATH" (concat (getenv "HOME") ".miniconda2/bin:" (getenv "PATH")))
@@ -69,7 +69,7 @@
 (defun my-buffer-face-mode-variable ()
   "Set font to a variable width (proportional) fonts in current buffer"
   (interactive)
-  (setq buffer-face-mode-face '(:family "CMU Serif" :height 200 :width normal))
+  (setq buffer-face-mode-face '(:family "CMU Serif" :height 160 :width normal))
   (buffer-face-mode))
 
 (add-hook 'TeX-mode-hook '(lambda ()
@@ -105,69 +105,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(TeX-command-list
-   (quote
-    (("TeX" "%(PDF)%(tex) %`%S%(PDFout)%(mode)%' %t" TeX-run-TeX nil
-      (plain-tex-mode texinfo-mode ams-tex-mode)
-      :help "Run plain TeX")
-     (#("LaTeX" 0 1
-        (idx 0))
-      "%`%l%(mode)%' %t" TeX-run-TeX nil
-      (latex-mode doctex-mode)
-      :help "Run LaTeX")
-     ("Makeinfo" "makeinfo %t" TeX-run-compile nil
-      (texinfo-mode)
-      :help "Run Makeinfo with Info output")
-     ("Makeinfo HTML" "makeinfo --html %t" TeX-run-compile nil
-      (texinfo-mode)
-      :help "Run Makeinfo with HTML output")
-     ("AmSTeX" "%(PDF)amstex %`%S%(PDFout)%(mode)%' %t" TeX-run-TeX nil
-      (ams-tex-mode)
-      :help "Run AMSTeX")
-     ("ConTeXt" "texexec --once --texutil %(execopts)%t" TeX-run-TeX nil
-      (context-mode)
-      :help "Run ConTeXt once")
-     ("ConTeXt Full" "texexec %(execopts)%t" TeX-run-TeX nil
-      (context-mode)
-      :help "Run ConTeXt until completion")
-     (#("BibTeX" 0 1
-        (idx 1))
-      "bibtex %s" TeX-run-BibTeX nil t :help "Run BibTeX")
-     (#("Biber" 0 1
-        (idx 2))
-      "biber %s" TeX-run-Biber nil t :help "Run Biber")
-     (#("View" 0 1
-        (idx 3))
-      "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b" TeX-run-discard-or-function t t :help "Run Viewer")
-     (#("Print" 0 1
-        (idx 4))
-      "%p" TeX-run-command t t :help "Print the file")
-     (#("Queue" 0 1
-        (idx 5))
-      "%q" TeX-run-background nil t :help "View the printer queue" :visible TeX-queue-command)
-     (#("File" 0 1
-        (idx 6))
-      "%(o?)dvips %d -o %f " TeX-run-command t t :help "Generate PostScript file")
-     (#("Index" 0 1
-        (idx 7))
-      "makeindex %s" TeX-run-command nil t :help "Create index file")
-     (#("Check" 0 1
-        (idx 8))
-      "lacheck %s" TeX-run-compile nil
-      (latex-mode)
-      :help "Check LaTeX file for correctness")
-     (#("Spell" 0 1
-        (idx 9))
-      "(TeX-ispell-document \"\")" TeX-run-function nil t :help "Spell-check the document")
-     (#("Clean" 0 1
-        (idx 10))
-      "TeX-clean" TeX-run-function nil t :help "Delete generated intermediate files")
-     (#("Clean All" 0 1
-        (idx 11))
-      "(TeX-clean t)" TeX-run-function nil t :help "Delete generated intermediate and output files")
-     (#("Other" 0 1
-        (idx 12))
-      "" TeX-run-command t t :help "Run an arbitrary command"))))
  '(TeX-source-correlate-method (quote synctex))
  '(TeX-source-correlate-mode t)
  '(TeX-source-correlate-start-server t)
@@ -205,7 +142,6 @@
    (quote
     ("#336c6c" "#205070" "#0f2050" "#806080" "#401440" "#6c1f1c" "#6b400c" "#23733c")))
  '(ns-use-native-fullscreen nil)
- '(org-babel-load-languages (quote ((emacs-lisp . t) (shell . t) (gnuplot . t))))
  '(package-selected-packages
    (quote
     (fortpy counsel-spotify spotify org-download org-plus-contrib gnuplot gnuplot-mode leuven-theme google-this ivy-hydra ivy-bibtex swiper counsel-gtags counsel ivy jedi haskell-mode ensime sbt-mode ein applescript-mode zone-nyan zenburn-theme yaml-mode xterm-keybinder web-mode undo-tree sunny-day-theme spacemacs-theme smartparens selectric-mode request-deferred realgud pos-tip org nyan-mode names multiple-cursors monokai-theme matlab-mode magit list-utils light-soap-theme kv json-mode ipython function-args flycheck exec-path-from-shell elpy elm-yasnippets elm-mode cuda-mode company-jedi company-irony company-cmake company-c-headers company-auctex cmake-mode buffer-move anaphora)))
