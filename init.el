@@ -8,7 +8,7 @@
                      jedi ensime sbt-mode ein applescript-mode
                      zone-nyan zenburn-theme yaml-mode
                      xterm-keybinder web-mode undo-tree
-                     sunny-day-theme spotify spacemacs-theme
+                     sunny-day-theme counsel-spotify spacemacs-theme
                      smartparens selectric-mode request-deferred
                      realgud pos-tip org nyan-mode names
                      multiple-cursors monokai-theme matlab-mode
@@ -124,9 +124,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(TeX-source-correlate-method (quote synctex))
+ '(TeX-source-correlate-method (quote synctex) t)
  '(TeX-source-correlate-mode t)
- '(TeX-source-correlate-start-server t)
+ '(TeX-source-correlate-start-server t t)
  '(ansi-color-faces-vector
    [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector
@@ -138,11 +138,14 @@
                    (company-dabbrev-code company-gtags company-etags company-keywords)
                    company-oddmuse company-files)))
  '(compilation-message-face (quote default))
+ '(counsel-spotify-client-id "9ad04a34fc0d463faac74bd7f8295099")
+ '(counsel-spotify-client-secret "32014a3690f64c48ac3f7c27e7c66a31")
  '(custom-enabled-themes (quote (leuven)))
  '(custom-safe-themes
    (quote
     ("9a155066ec746201156bb39f7518c1828a73d67742e11271e4f24b7b178c4710" "ba7917b02812fee8da4827fdf7867d3f6f282694f679b5d73f9965f45590843a" "c72a772c104710300103307264c00a04210c00f6cc419a79b8af7890478f380e" "d5f17ae86464ef63c46ed4cb322703d91e8ed5e718bf5a7beb69dd63352b26b2" "a0dc0c1805398db495ecda1994c744ad1a91a9455f2a17b59b716f72d3585dde" "ad9747dc51ca23d1c1382fa9bd5d76e958a5bfe179784989a6a666fe801aadf2" "807a7f4c2d0d331fc1798e6d38b890ce3582096b8d622ba3b491b2aa4345e962" "bf64dd3657eef02b3b5f7439d452c7b18f4b5c1e717e6037c8f2b61b9b3dbcf8" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "40f6a7af0dfad67c0d4df2a1dd86175436d79fc69ea61614d668a635c2cd94ab" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "b9183de9666c3a16a7ffa7faaa8e9941b8d0ab50f9aaba1ca49f2f3aec7e3be9" "efb148b9a120f417464713fe6cad47eb708dc45c7f2dbfeea4a7ec329214e63e" "e80932ca56b0f109f8545576531d3fc79487ca35a9a9693b62bf30d6d08c9aaf" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "60f04e478dedc16397353fb9f33f0d895ea3dab4f581307fbf0aa2f07e658a40" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "9370aeac615012366188359cb05011aea721c73e1cb194798bc18576025cabeb" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" default)))
  '(doc-view-resolution 600)
+ '(ess-language "R" t)
  '(fci-rule-color "#efefef" t)
  '(highlight-changes-colors (quote ("#FD5FF0" "#AE81FF")))
  '(highlight-tail-colors
@@ -155,6 +158,7 @@
      ("#A75B00" . 70)
      ("#F309DF" . 85)
      ("#3C3D37" . 100))))
+ '(hl-sexp-background-color "#efebe9")
  '(magit-diff-use-overlays nil)
  '(magit-revert-buffers t t)
  '(nrepl-message-colors
@@ -163,16 +167,17 @@
  '(ns-use-native-fullscreen nil)
  '(package-selected-packages
    (quote
-    (irony-eldoc markdown-mode fortpy counsel-spotify spotify org-download org-plus-contrib gnuplot gnuplot-mode leuven-theme google-this ivy-hydra ivy-bibtex swiper counsel-gtags counsel ivy jedi ensime sbt-mode ein applescript-mode zone-nyan zenburn-theme yaml-mode xterm-keybinder web-mode undo-tree sunny-day-theme spacemacs-theme smartparens selectric-mode request-deferred realgud pos-tip org nyan-mode names multiple-cursors monokai-theme matlab-mode magit list-utils light-soap-theme kv json-mode ipython function-args flycheck exec-path-from-shell elpy elm-yasnippets elm-mode cuda-mode company-jedi company-irony company-cmake company-c-headers company-auctex cmake-mode buffer-move anaphora)))
+    (elm-mode elm-yasnippets magit swiper yasnippet org-download irony-eldoc markdown-mode fortpy counsel-spotify org-plus-contrib gnuplot gnuplot-mode leuven-theme google-this ivy-hydra ivy-bibtex counsel-gtags counsel ivy jedi ensime sbt-mode ein applescript-mode zone-nyan zenburn-theme yaml-mode xterm-keybinder web-mode undo-tree sunny-day-theme spacemacs-theme smartparens selectric-mode request-deferred realgud pos-tip org nyan-mode names multiple-cursors monokai-theme matlab-mode list-utils light-soap-theme kv json-mode ipython function-args flycheck exec-path-from-shell elpy cuda-mode company-jedi company-irony company-cmake company-c-headers company-auctex cmake-mode buffer-move anaphora)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
- '(recentf-exclude (quote ("\\.emacs.d.*")))
+ '(recentf-exclude (quote ("\\.emacs.d.*")) t)
  '(red "#ffffff")
  '(request-backend (quote url-retrieve))
  '(sane-term-shell-command "/usr/local/bin/bash")
  '(show-paren-mode t)
  '(tab-width 4)
  '(tool-bar-mode nil)
+ '(tramp-syntax (quote default) nil (tramp))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
    (quote
@@ -195,8 +200,8 @@
      (340 . "#94BFF3")
      (360 . "#DC8CC3"))))
  '(vc-annotate-very-old-color "#DC8CC3")
- '(weechat-color-list
-   (unspecified "#272822" "#3C3D37" "#F70057" "#F92672" "#86C30D" "#A6E22E" "#BEB244" "#E6DB74" "#40CAE4" "#66D9EF" "#FB35EA" "#FD5FF0" "#74DBCD" "#A1EFE4" "#F8F8F2" "#F8F8F0")))
+ )
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -222,11 +227,6 @@
 
 
 (require 'multiple-cursors)
-
-
-(defadvice pop-to-buffer (before cancel-other-window first)
-  (ad-set-arg 1 nil))
-(ad-activate 'pop-to-buffer)
 
 ;; Toggle window dedication
 (defun toggle-window-dedicated ()
@@ -490,6 +490,8 @@
 
 (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
 
+
+(require 'counsel-spotify)
 (ivy-mode 1)
 (setq ivy-use-virtual-buffers t)
 (global-set-key "\C-s" 'swiper)
@@ -517,8 +519,8 @@
 (global-set-key (kbd "C-x T") '(lambda () (interactive) (eshell 't)))
 (add-hook 'eshell-mode-hook 'auto-image-file-mode)
 (global-set-key [f6] 'google-this-search)
-(global-set-key [f7] 'spotify-previous)
-(global-set-key [f8] 'spotify-next)
+(global-set-key [f7] 'counsel-spotify-previous)
+(global-set-key [f8] 'counsel-spotify-next)
 (global-set-key [f9] 'toggle-window-dedicated)
 (global-set-key [f10] 'org-capture)
 (global-set-key [f12] 'toggle-fullscreen)
@@ -554,6 +556,10 @@
                '("revtex4-1"
                  "\\documentclass{revtex4-1}"
                  ("\\section{%s}" . "\\section*{%s}"))))
+
+(add-hook 'iESS-mode-hook 
+          (local-set-key (kbd "[?\\t]") 'complete-at-point)
+          )
 
 (require 'org-download)
 (add-hook 'org-mode-hook
@@ -641,3 +647,5 @@ BEG and END default to the buffer boundaries."
 (setq calendar-longitude 11.0120)
 (setq calendar-location-name "Erlangen, Bayern")
 
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/ess")
+(require 'ess-site)
