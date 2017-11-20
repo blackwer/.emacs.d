@@ -2,7 +2,7 @@
 (require 'package)
 
 
-; list the packages you want
+;; list the packages you want
 (setq package-list '(leuven-theme google-this ivy-hydra
                      ivy-bibtex swiper counsel-gtags counsel ivy
                      jedi ensime sbt-mode ein applescript-mode
@@ -124,9 +124,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(TeX-source-correlate-method (quote synctex) t)
+ '(TeX-source-correlate-method (quote synctex))
  '(TeX-source-correlate-mode t)
- '(TeX-source-correlate-start-server t t)
+ '(TeX-source-correlate-start-server t)
  '(ansi-color-faces-vector
    [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector
@@ -167,10 +167,10 @@
  '(ns-use-native-fullscreen nil)
  '(package-selected-packages
    (quote
-    (elm-mode elm-yasnippets magit swiper yasnippet org-download irony-eldoc markdown-mode fortpy counsel-spotify org-plus-contrib gnuplot gnuplot-mode leuven-theme google-this ivy-hydra ivy-bibtex counsel-gtags counsel ivy jedi ensime sbt-mode ein applescript-mode zone-nyan zenburn-theme yaml-mode xterm-keybinder web-mode undo-tree sunny-day-theme spacemacs-theme smartparens selectric-mode request-deferred realgud pos-tip org nyan-mode names multiple-cursors monokai-theme matlab-mode list-utils light-soap-theme kv json-mode ipython function-args flycheck exec-path-from-shell elpy cuda-mode company-jedi company-irony company-cmake company-c-headers company-auctex cmake-mode buffer-move anaphora)))
+    (elm-mode elm-yasnippets magit swiper yasnippet org-download irony-eldoc markdown-mode fortpy counsel-spotify org-plus-contrib gnuplot gnuplot-mode leuven-theme google-this ivy-hydra ivy-bibtex counsel-gtags counsel ivy jedi ensime sbt-mode ein applescript-mode zone-nyan zenburn-theme yaml-mode xterm-keybinder web-mode undo-tree sunny-day-theme spacemacs-theme selectric-mode request-deferred realgud pos-tip org nyan-mode names multiple-cursors monokai-theme matlab-mode list-utils light-soap-theme kv json-mode ipython function-args flycheck exec-path-from-shell elpy cuda-mode company-jedi company-irony company-cmake company-c-headers company-auctex cmake-mode buffer-move anaphora)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
- '(recentf-exclude (quote ("\\.emacs.d.*")) t)
+ '(recentf-exclude (quote ("\\.emacs.d.*")))
  '(red "#ffffff")
  '(request-backend (quote url-retrieve))
  '(sane-term-shell-command "/usr/local/bin/bash")
@@ -207,7 +207,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Anonymous Pro" :foundry "nil" :slant normal :weight normal :height 160 :width normal)))))
+ '(default ((t (:family "Anonymous Pro" :foundry "nil" :slant normal :weight normal :height 160 :width normal))))
+ '(preview-reference-face ((t nil))))
 
 (defun toggle-fullscreen ()
   "Toggle full screen"
@@ -523,7 +524,6 @@
 (global-set-key [f8] 'counsel-spotify-next)
 (global-set-key [f9] 'toggle-window-dedicated)
 (global-set-key [f10] 'org-capture)
-(global-set-key [f12] 'toggle-fullscreen)
 (global-set-key (kbd "C-c p f") 'counsel-git)
 (global-set-key (kbd "C-c m") 'magit-status)
 (global-set-key (kbd "s-p") nil)
