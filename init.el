@@ -59,7 +59,6 @@
 (add-hook 'LaTeX-mode-hook 'auto-fill-mode)
 (add-hook 'LaTeX-mode-hook 'tex-fold-mode)
 (add-hook 'LaTeX-mode-hook 'smartparens-mode)
-(add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
 (add-hook 'LaTeX-mode-hook 'smartparens-mode)
 (add-hook 'LaTeX-mode-hook 'flycheck-mode)
 (setq ispell-program-name "aspell")
