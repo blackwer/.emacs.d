@@ -177,6 +177,12 @@ BEG and END default to the buffer boundaries."
 (use-package zenburn-theme
   :ensure t
   :defer t)
+(use-package color-theme-sanityinc-solarized
+  :ensure t
+  :defer t)
+(use-package color-theme-sanityinc-tomorrow
+  :ensure t
+  :defer t)
 (use-package spacemacs-theme
   :ensure t
   :defer t)
@@ -355,7 +361,7 @@ BEG and END default to the buffer boundaries."
 (setq ring-bell-function 'no-bell)
 (setq visible-bell nil)
 (setq ns-pop-up-frames 'nil)
-(setq doc-view-resolution 150)
+(setq doc-view-resolution 72)
 
 ;; Leftover keybindings
 (global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -427,7 +433,7 @@ BEG and END default to the buffer boundaries."
     ("#336c6c" "#205070" "#0f2050" "#806080" "#401440" "#6c1f1c" "#6b400c" "#23733c")))
  '(package-selected-packages
    (quote
-    (python-mode org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin counsel use-package org-download multiple-cursors dired-sidebar counsel-spotify auctex)))
+    (color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow python-mode org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin counsel use-package org-download multiple-cursors dired-sidebar counsel-spotify auctex)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
  '(recentf-exclude (quote ("\\.emacs.d.*")))
