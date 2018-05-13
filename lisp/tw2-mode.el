@@ -26,20 +26,19 @@
 
 (require 'generic-x)
 (define-generic-mode 'tw2-mode
-  '("//" ("/\*" . "\*/"))
+  '(("/\*" . "\*/"))
   '("true" "false")
-  '(("=" . 'font-lock-keyword-face)
-    ("==" . 'font-lock-keyword-face)
-    ("<<[^\s>]*" . 'font-lock-function-name-face)
+  '(("<<[^\s>]*" . 'font-lock-function-name-face)
     (">>" . 'font-lock-function-name-face)
     ("\$[^\s>\n]+" . 'font-lock-variable-name-face)
     ("\\(^\\|\s\\)_[^\s>\n]+" . 'font-lock-variable-name-face)
     ("[A-Za-z0-9]*::[^\n]*" . font-lock-function-name-face)
-    ("\\[\\[.*\\]\\]" . font-lock-doc-face)
+    ("\\[\\[.*\\]\\]" . font-lock-type-face)
     )
   '("\\.tw2$")
   nil
   "A mode for twee2 files")
+
 
 (provide 'tw2-mode)
 ;;; tw2-mode.el ends here
