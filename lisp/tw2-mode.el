@@ -35,7 +35,7 @@
     ("[A-Za-z0-9]*::[^\n]*" . font-lock-function-name-face)
     ("\\[\\[.*\\]\\]" . font-lock-type-face)
     )
-  '("\\.tw2$")
+  '("\\.tw2$" "\\.twee$")
   nil
   "A mode for twee2 files")
 

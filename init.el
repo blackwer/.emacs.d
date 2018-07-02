@@ -35,7 +35,12 @@
   (use-package all-the-icons-dired
     ;; M-x all-the-icons-install-fonts
     :commands (all-the-icons-dired-mode)))
-
+(use-package pdf-tools
+  :ensure t
+  :init
+  (pdf-tools-install)
+  (add-to-list 'auto-mode-alist '("\\.pdf\\'" . pdf-view-mode))
+  )
 (use-package org
   :pin org
   :ensure t
@@ -132,6 +137,11 @@ BEG and END default to the buffer boundaries."
                    (setq org-download-image-dir
                          (concat (file-name-sans-extension (buffer-file-name)) "-org-images"))
                  (setq org-download-image-dir "org-images")))))
+(use-package notmuch
+  :ensure t
+  :init
+  (setq message-kill-buffer-on-exit t)
+  )
 
 (use-package tex
   :ensure auctex
@@ -139,8 +149,7 @@ BEG and END default to the buffer boundaries."
   (use-package auctex-latexmk :ensure t)
   (require 'auctex-latexmk)
   (auctex-latexmk-setup)
-
-  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
+  
   (add-hook 'LaTeX-mode-hook 'visual-line-mode)
 
   (require 'tex-fold-linebreaks)
@@ -155,11 +164,7 @@ BEG and END default to the buffer boundaries."
   (setq reftex-plug-into-AUCTeX t)
   (setq TeX-source-correlate-method 'synctex)
   (setq TeX-source-correlate-start-server t)
-  
-  (when (equal system-type 'darwin)
-    (setq TeX-view-program-selection '((output-pdf "PDF Viewer")))
-    (setq TeX-view-program-list
-          '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n build/%o %b"))))
+
   (setq-default fill-column 95)
   (add-to-list 'exec-path "/Library/TeX/texbin")
   (setenv "PATH" (concat "/Library/TeX/texbin:" (getenv "PATH")))
@@ -168,9 +173,20 @@ BEG and END default to the buffer boundaries."
   (defun my-buffer-face-mode-variable ()
     "Set font to a variable width (proportional) fonts in current buffer"
     (interactive)
-    (setq buffer-face-mode-face '(:family "CMU Serif" :height 140 :width normal))
+    (setq buffer-face-mode-face '(:family "CMU Serif" :height 130 :width normal))
     (buffer-face-mode))
 
+  (set-default 'preview-scale-function 1.0)
+  ;; to use pdfview with auctex
+  (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
+        TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))
+        ;; TeX-source-correlate-start-server t
+        ) ;; not sure if last line is neccessary
+
+  ;; to have the buffer refresh after compilation
+  (add-hook 'TeX-after-compilation-finished-functions
+            'TeX-revert-document-buffer)
+  
   (add-hook 'TeX-mode-hook '(lambda ()
                               (company-mode)
                               (make-local-variable 'company-backends)
@@ -181,7 +197,8 @@ BEG and END default to the buffer boundaries."
                               (my-buffer-face-mode-variable))))
 
 (use-package leuven-theme
-  :ensure t)
+  :ensure t
+  :defer t)
 (use-package zenburn-theme
   :ensure t
   :defer t)
@@ -297,7 +314,7 @@ BEG and END default to the buffer boundaries."
 (use-package magit
   :ensure t
   :config
-  (global-set-key (kbd "C-c m") 'magit-status)
+  (global-magit-file-mode t)
   (setq magit-diff-use-overlays nil)
   (setq magit-revert-buffers t))
 (use-package list-utils
@@ -369,13 +386,11 @@ BEG and END default to the buffer boundaries."
 (setq ring-bell-function 'no-bell)
 (setq visible-bell nil)
 (setq ns-pop-up-frames 'nil)
-(setq doc-view-resolution 72)
 
 ;; Leftover keybindings
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-x t") 'eshell)
 (global-set-key (kbd "C-x T") '(lambda () (interactive) (eshell 't)))
-(add-hook 'eshell-mode-hook 'auto-image-file-mode)
 (global-set-key [f9] 'toggle-window-dedicated)
 (global-set-key (kbd "C-c p f") 'counsel-git)
 (global-set-key (kbd "C-:") 'complete-symbol)
@@ -411,9 +426,6 @@ BEG and END default to the buffer boundaries."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(TeX-view-program-list
-   (quote
-    (("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n build/%o %b"))))
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
@@ -426,6 +438,7 @@ BEG and END default to the buffer boundaries."
    (quote
     ("9a155066ec746201156bb39f7518c1828a73d67742e11271e4f24b7b178c4710" "ba7917b02812fee8da4827fdf7867d3f6f282694f679b5d73f9965f45590843a" "c72a772c104710300103307264c00a04210c00f6cc419a79b8af7890478f380e" "d5f17ae86464ef63c46ed4cb322703d91e8ed5e718bf5a7beb69dd63352b26b2" "a0dc0c1805398db495ecda1994c744ad1a91a9455f2a17b59b716f72d3585dde" "ad9747dc51ca23d1c1382fa9bd5d76e958a5bfe179784989a6a666fe801aadf2" "807a7f4c2d0d331fc1798e6d38b890ce3582096b8d622ba3b491b2aa4345e962" "bf64dd3657eef02b3b5f7439d452c7b18f4b5c1e717e6037c8f2b61b9b3dbcf8" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "40f6a7af0dfad67c0d4df2a1dd86175436d79fc69ea61614d668a635c2cd94ab" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "b9183de9666c3a16a7ffa7faaa8e9941b8d0ab50f9aaba1ca49f2f3aec7e3be9" "efb148b9a120f417464713fe6cad47eb708dc45c7f2dbfeea4a7ec329214e63e" "e80932ca56b0f109f8545576531d3fc79487ca35a9a9693b62bf30d6d08c9aaf" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "60f04e478dedc16397353fb9f33f0d895ea3dab4f581307fbf0aa2f07e658a40" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "9370aeac615012366188359cb05011aea721c73e1cb194798bc18576025cabeb" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" default)))
  '(ein:jupyter-default-notebook-directory "~/projects")
+ '(ein:slice-image t)
  '(ess-language "R" t)
  '(fci-rule-color "#efefef" t)
  '(flycheck-color-mode-line-face-to-color (quote mode-line-buffer-id))
@@ -441,17 +454,22 @@ BEG and END default to the buffer boundaries."
      ("#F309DF" . 85)
      ("#3C3D37" . 100))))
  '(hl-sexp-background-color "#efebe9")
+ '(notmuch-fcc-dirs (quote (("robert.blackwell@fau.de" . "fau/Sent"))))
+ '(notmuch-poll-script "notmuch-poll.sh")
  '(nrepl-message-colors
    (quote
     ("#336c6c" "#205070" "#0f2050" "#806080" "#401440" "#6c1f1c" "#6b400c" "#23733c")))
  '(package-selected-packages
    (quote
-    (glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk ein anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin counsel use-package org-download multiple-cursors dired-sidebar counsel-spotify auctex)))
+    (notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk ein anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin counsel use-package org-download multiple-cursors dired-sidebar counsel-spotify auctex)))
  '(pos-tip-background-color "#36473A")
  '(pos-tip-foreground-color "#FFFFC8")
  '(red "#ffffff")
  '(request-backend (quote url-retrieve))
+ '(send-mail-function (quote smtpmail-send-it))
  '(show-paren-mode t)
+ '(smtpmail-smtp-server "smtp-auth.fau.de")
+ '(smtpmail-smtp-service 25)
  '(tab-width 4)
  '(tex-fold-linebreaks-rebind-characters nil)
  '(tex-fold-linebreaks-sentence-end-punctuation (quote (("." . ".") ("?" . "?") ("!" . "!"))))
@@ -485,7 +503,7 @@ BEG and END default to the buffer boundaries."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Input Mono" :foundry "nil" :slant normal :weight medium :height 100 :width narrow))))
+ '(default ((t (:family "Input Mono" :foundry "nil" :slant normal :weight medium :height 90 :width narrow))))
  '(preview-reference-face ((t nil))))
 
 ;; mac specific shit
@@ -568,7 +586,6 @@ BEG and END default to the buffer boundaries."
 (setq f90-type-indent 2)
 
 
-(set-default 'preview-scale-function 1.2)
 ;; (xterm-mouse-mode t)
 ;; (setq x-select-enable-clipboard t)
 ;; (setq mouse-sel-mode t)
@@ -694,7 +711,7 @@ BEG and END default to the buffer boundaries."
                     :weight 'bold)
 (set-face-attribute 'mode-line-position-face nil
                     :inherit 'mode-line-face
-                    :family "Menlo" :height 100)
+                    :family "Input Mono" :height 80)
 (set-face-attribute 'mode-line-mode-face nil
                     :inherit 'mode-line-face
                     :foreground "gray80")
@@ -711,10 +728,10 @@ BEG and END default to the buffer boundaries."
 
 
 ;; ===== Scrolling fix for advanced mouses =============================
-(defun up-slightly () (interactive) (scroll-up 3))
-(defun down-slightly () (interactive) (scroll-down 3))
-(global-set-key [mouse-8] 'down-slightly)
-(global-set-key [mouse-9] 'up-slightly)
+;; (defun up-slightly () (interactive) (scroll-up 3))
+;; (defun down-slightly () (interactive) (scroll-down 3))
+;; (global-set-key [mouse-8] 'down-slightly)
+;; (global-set-key [mouse-9] 'up-slightly)
 
 
 (setq vc-ignore-dir-regexp
@@ -789,7 +806,7 @@ BEG and END default to the buffer boundaries."
              (local-set-key (kbd "C-c i") 'ivy-imenu-anywhere)
              (setq imenu-generic-expression tw2-imenu-generic-expression)
              (visual-line-mode t)
-             (smart-parens-mode)
+             (smartparens-mode)
              ))
 
 (put 'narrow-to-region 'disabled nil)
@@ -798,4 +815,22 @@ BEG and END default to the buffer boundaries."
 (add-to-list 'recentf-exclude ".*personal.*")
 
 (setq ein:use-auto-complete t)
+
+;; js2-mode stuff
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+(add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
+(add-hook 'js2-mode-hook #'js2-refactor-mode)
+(js2r-add-keybindings-with-prefix "C-c C-r")
+(define-key js2-mode-map (kbd "C-k") #'js2r-kill)
+(define-key js-mode-map (kbd "M-.") nil)
+(add-hook 'js2-mode-hook (lambda ()
+  (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
+(define-key js2-mode-map (kbd "C-k") #'js2r-kill)
+(add-to-list 'company-backends 'company-tern)
+(add-hook 'js2-mode-hook (lambda ()
+                           (tern-mode)
+                           (company-mode)))
+(require 'tern)
+(define-key tern-mode-keymap (kbd "M-.") nil)
+(define-key tern-mode-keymap (kbd "M-,") nil)
 
