@@ -35,12 +35,53 @@
   (use-package all-the-icons-dired
     ;; M-x all-the-icons-install-fonts
     :commands (all-the-icons-dired-mode)))
+(use-package esh-autosuggest
+  :hook (eshell-mode . esh-autosuggest-mode)
+  ;; If you have use-package-hook-name-suffix set to nil, uncomment and use the
+  ;; line below instead:
+  ;; :hook (eshell-mode-hook . esh-autosuggest-mode)
+  :ensure t)
 (use-package pdf-tools
   :ensure t
   :init
   (pdf-tools-install)
   (add-to-list 'auto-mode-alist '("\\.pdf\\'" . pdf-view-mode))
   )
+(use-package typescript-mode
+  :ensure t
+  :config
+  (setq typescript-indent-level 2)
+  (add-hook 'typescript-mode #'subword-mode))
+(use-package web-mode
+  :ensure t
+  :mode (("\\.html?\\'" . web-mode)
+         ("\\.tsx\\'" . web-mode)
+         ("\\.jsx\\'" . web-mode))
+  :config
+  (setq web-mode-markup-indent-offset 2
+        web-mode-css-indent-offset 2
+        web-mode-code-indent-offset 2
+        web-mode-block-padding 2
+        web-mode-comment-style 2
+
+        web-mode-enable-css-colorization t
+        web-mode-enable-auto-pairing t
+        web-mode-enable-comment-keywords t
+        web-mode-enable-current-element-highlight t
+        )
+  (add-hook 'web-mode-hook
+            (lambda ()
+              (when (string-equal "tsx" (file-name-extension buffer-file-name))
+		(setup-tide-mode))))
+  ;; enable typescript-tslint checker
+  (flycheck-add-mode 'typescript-tslint 'web-mode))
+(use-package tide
+  :init
+  :ensure t
+  :after (typescript-mode company flycheck)
+  :hook ((typescript-mode . tide-setup)
+         (typescript-mode . tide-hl-identifier-mode)
+         (before-save . tide-format-before-save)))
 (use-package org
   :pin org
   :ensure t
@@ -57,6 +98,15 @@
         org-src-fontify-natively t
         org-src-tab-acts-natively t
         org-image-actual-width 600)
+  (org-babel-do-load-languages
+   'org-babel-load-languages (quote ((emacs-lisp . t)
+                                     (sqlite . t)
+                                     (clojure . t)
+                                     (sagemath . t)
+                                     (calc . t)
+                                     (python . t))))
+  (setq org-babel-python-command "python3")
+ 
   :config
   (global-set-key [f10] 'org-capture)
   (setq org-capture-templates
@@ -126,7 +176,51 @@ BEG and END default to the buffer boundaries."
                                    (list 'org-display-inline-remove-overlay))
                       (push ov org-inline-image-overlays)))))))))))
   )
+(use-package ob-sagemath
+  :ensure t
+  :after org
+  :init
+  ;; Ob-sagemath supports only evaluating with a session.
+  (setq org-babel-default-header-args:sage '((:session . t)
+                                             (:results . "output")))
 
+  ;; C-c c for asynchronous evaluating (only for SageMath code blocks).
+  (with-eval-after-load "org"
+    (define-key org-mode-map (kbd "C-c c") 'ob-sagemath-execute-async))
+
+  ;; Do not confirm before evaluation
+  (setq org-confirm-babel-evaluate nil)
+
+  ;; Do not evaluate code blocks when exporting.
+  (setq org-export-babel-evaluate nil)
+
+  ;; Show images when opening a file.
+  (setq org-startup-with-inline-images t)
+
+  ;; Show images after evaluating code blocks.
+  (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
+
+  (setenv "SAGE_ROOT" "/home/rblack/.miniconda3/envs/sage")
+  (setenv "SAGE_LOCAL" "/home/rblack/.miniconda3/envs/sage")
+  )
+(use-package org-ref
+  :ensure t
+  :after org
+  :init
+  (setq org-ref-completion-library 'org-ref-ivy-cite)
+  (setq org-ref-default-bibliography '("~/projects/misc/bibliography/globalrefs.bib")
+        org-ref-pdf-directory "~/projects/misc/bibliography/bibtex-pdfs/"
+        org-ref-bibliography-notes "~/projects/misc/bibliography/notes.org")
+  (setq org-latex-pdf-process
+        '("pdflatex -interaction nonstopmode -output-directory %o %f"
+	      "bibtex %b"
+	      "pdflatex -interaction nonstopmode -output-directory %o %f"
+	      "pdflatex -interaction nonstopmode -output-directory %o %f"))
+  )
+(use-package ox-pandoc
+  :ensure t
+  :after org
+  )
 (use-package org-download
   :ensure t
   :after org
@@ -173,10 +267,10 @@ BEG and END default to the buffer boundaries."
   (defun my-buffer-face-mode-variable ()
     "Set font to a variable width (proportional) fonts in current buffer"
     (interactive)
-    (setq buffer-face-mode-face '(:family "CMU Serif" :height 130 :width normal))
+    (setq buffer-face-mode-face '(:family "TeX Gyre Bonum" :height 140 :width normal))
     (buffer-face-mode))
 
-  (set-default 'preview-scale-function 1.0)
+  (set-default 'preview-scale-function 1.2)
   ;; to use pdfview with auctex
   (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
         TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))
@@ -198,7 +292,10 @@ BEG and END default to the buffer boundaries."
 
 (use-package leuven-theme
   :ensure t
-  :defer t)
+  :init
+  (set-cursor-color "#6666ff")
+  ;; :defer t
+  )
 (use-package zenburn-theme
   :ensure t
   :defer t)
@@ -317,6 +414,11 @@ BEG and END default to the buffer boundaries."
   (global-magit-file-mode t)
   (setq magit-diff-use-overlays nil)
   (setq magit-revert-buffers t))
+(use-package magit-todos
+  :ensure t
+  :config
+  (magit-todos-mode t)
+  )
 (use-package list-utils
   :ensure t)
 (use-package kv
@@ -426,11 +528,6 @@ BEG and END default to the buffer boundaries."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
- '(beacon-color "#f2777a")
  '(blink-cursor-mode t)
  '(column-number-mode t)
  '(compilation-message-face (quote default))
@@ -440,31 +537,15 @@ BEG and END default to the buffer boundaries."
  '(ein:jupyter-default-notebook-directory "~/projects")
  '(ein:slice-image t)
  '(ess-language "R" t)
- '(fci-rule-color "#efefef" t)
- '(flycheck-color-mode-line-face-to-color (quote mode-line-buffer-id))
- '(highlight-changes-colors (quote ("#FD5FF0" "#AE81FF")))
- '(highlight-tail-colors
-   (quote
-    (("#3C3D37" . 0)
-     ("#679A01" . 20)
-     ("#4BBEAE" . 30)
-     ("#1DB4D0" . 50)
-     ("#9A8F21" . 60)
-     ("#A75B00" . 70)
-     ("#F309DF" . 85)
-     ("#3C3D37" . 100))))
- '(hl-sexp-background-color "#efebe9")
  '(notmuch-fcc-dirs (quote (("robert.blackwell@fau.de" . "fau/Sent"))))
  '(notmuch-poll-script "notmuch-poll.sh")
- '(nrepl-message-colors
+ '(org-agenda-files
    (quote
-    ("#336c6c" "#205070" "#0f2050" "#806080" "#401440" "#6c1f1c" "#6b400c" "#23733c")))
+    ("~/projects/manuscripts/motorspaper/plots.org" "~/projects/manuscripts/motorspaper/molmot_rb/plots.org")))
  '(package-selected-packages
    (quote
-    (notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk ein anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin counsel use-package org-download multiple-cursors dired-sidebar counsel-spotify auctex)))
- '(pos-tip-background-color "#36473A")
- '(pos-tip-foreground-color "#FFFFC8")
- '(red "#ffffff")
+    (ob-sagemath ox-pandoc org-ref htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk ein anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin counsel use-package org-download multiple-cursors dired-sidebar counsel-spotify auctex)))
+ '(preview-default-document-pt 12)
  '(request-backend (quote url-retrieve))
  '(send-mail-function (quote smtpmail-send-it))
  '(show-paren-mode t)
@@ -474,29 +555,7 @@ BEG and END default to the buffer boundaries."
  '(tex-fold-linebreaks-rebind-characters nil)
  '(tex-fold-linebreaks-sentence-end-punctuation (quote (("." . ".") ("?" . "?") ("!" . "!"))))
  '(tool-bar-mode nil)
- '(tramp-syntax (quote default) nil (tramp))
- '(vc-annotate-background "#2B2B2B")
- '(vc-annotate-color-map
-   (quote
-    ((20 . "#BC8383")
-     (40 . "#CC9393")
-     (60 . "#DFAF8F")
-     (80 . "#D0BF8F")
-     (100 . "#E0CF9F")
-     (120 . "#F0DFAF")
-     (140 . "#5F7F5F")
-     (160 . "#7F9F7F")
-     (180 . "#8FB28F")
-     (200 . "#9FC59F")
-     (220 . "#AFD8AF")
-     (240 . "#BFEBBF")
-     (260 . "#93E0E3")
-     (280 . "#6CA0A3")
-     (300 . "#7CB8BB")
-     (320 . "#8CD0D3")
-     (340 . "#94BFF3")
-     (360 . "#DC8CC3"))))
- '(vc-annotate-very-old-color "#DC8CC3"))
+ '(tramp-syntax (quote default) nil (tramp)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -833,4 +892,5 @@ BEG and END default to the buffer boundaries."
 (require 'tern)
 (define-key tern-mode-keymap (kbd "M-.") nil)
 (define-key tern-mode-keymap (kbd "M-,") nil)
+
 
