@@ -47,6 +47,16 @@
   (pdf-tools-install)
   (add-to-list 'auto-mode-alist '("\\.pdf\\'" . pdf-view-mode))
   )
+(use-package xelb
+  :ensure t
+  )
+(use-package exwm
+  :ensure t
+  :config
+  (require 'exwm)
+  (require 'exwm-config)
+  (exwm-config-default)
+  )
 (use-package typescript-mode
   :ensure t
   :config
@@ -537,14 +547,19 @@ BEG and END default to the buffer boundaries."
  '(ein:jupyter-default-notebook-directory "~/projects")
  '(ein:slice-image t)
  '(ess-language "R" t)
+ '(fci-rule-color "#969896")
  '(notmuch-fcc-dirs (quote (("robert.blackwell@fau.de" . "fau/Sent"))))
  '(notmuch-poll-script "notmuch-poll.sh")
+ '(nrepl-message-colors
+   (quote
+    ("#183691" "#969896" "#a71d5d" "#969896" "#0086b3" "#795da3" "#a71d5d" "#969896")))
  '(org-agenda-files
    (quote
     ("~/projects/manuscripts/motorspaper/plots.org" "~/projects/manuscripts/motorspaper/molmot_rb/plots.org")))
  '(package-selected-packages
    (quote
-    (ob-sagemath ox-pandoc org-ref htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk ein anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin counsel use-package org-download multiple-cursors dired-sidebar counsel-spotify auctex)))
+    (exwm xelb ob-sagemath ox-pandoc org-ref htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk ein anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin counsel use-package org-download multiple-cursors dired-sidebar counsel-spotify auctex)))
+ '(pdf-view-midnight-colors (quote ("#969896" . "#f8eec7")))
  '(preview-default-document-pt 12)
  '(request-backend (quote url-retrieve))
  '(send-mail-function (quote smtpmail-send-it))
@@ -555,7 +570,29 @@ BEG and END default to the buffer boundaries."
  '(tex-fold-linebreaks-rebind-characters nil)
  '(tex-fold-linebreaks-sentence-end-punctuation (quote (("." . ".") ("?" . "?") ("!" . "!"))))
  '(tool-bar-mode nil)
- '(tramp-syntax (quote default) nil (tramp)))
+ '(tramp-syntax (quote default) nil (tramp))
+ '(vc-annotate-background "#b0cde7")
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#969896")
+     (40 . "#183691")
+     (60 . "#969896")
+     (80 . "#969896")
+     (100 . "#969896")
+     (120 . "#a71d5d")
+     (140 . "#969896")
+     (160 . "#969896")
+     (180 . "#969896")
+     (200 . "#969896")
+     (220 . "#63a35c")
+     (240 . "#0086b3")
+     (260 . "#795da3")
+     (280 . "#969896")
+     (300 . "#0086b3")
+     (320 . "#969896")
+     (340 . "#a71d5d")
+     (360 . "#969896"))))
+ '(vc-annotate-very-old-color "#969896"))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
