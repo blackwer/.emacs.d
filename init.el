@@ -3,13 +3,6 @@
 (require 'package) ;; Load package manager
 (setq package-enable-at-startup nil)   ; To prevent initialising twice
 
-;; ;; Annoying workaround to install updated versions of built-ins such as org
-;; (defun package-from-archive (f &rest args)
-;;   (and (apply f args)
-;;        (assq (car args) package-alist)))
-
-;; (advice-add 'package-installed-p :around 'package-from-archive)
-
 ;; Add the Marmalade repo
 (add-to-list 'package-archives
              '("marmalade" . "http://marmalade-repo.org/packages/"))
@@ -56,6 +49,14 @@
   (require 'exwm)
   (require 'exwm-config)
   (exwm-config-default)
+  (require 'exwm-systemtray)
+  (exwm-systemtray-enable)
+  )
+(use-package desktop-environment
+  :ensure t
+  :config
+  (require 'desktop-environment)
+  (desktop-environment-mode t)
   )
 (use-package typescript-mode
   :ensure t
@@ -558,7 +559,7 @@ BEG and END default to the buffer boundaries."
     ("~/projects/manuscripts/motorspaper/plots.org" "~/projects/manuscripts/motorspaper/molmot_rb/plots.org")))
  '(package-selected-packages
    (quote
-    (exwm xelb ob-sagemath ox-pandoc org-ref htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk ein anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin counsel use-package org-download multiple-cursors dired-sidebar counsel-spotify auctex)))
+    (desktop-environment exwm xelb ob-sagemath ox-pandoc org-ref htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk ein anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin counsel use-package org-download multiple-cursors dired-sidebar counsel-spotify auctex)))
  '(pdf-view-midnight-colors (quote ("#969896" . "#f8eec7")))
  '(preview-default-document-pt 12)
  '(request-backend (quote url-retrieve))
@@ -929,5 +930,3 @@ BEG and END default to the buffer boundaries."
 (require 'tern)
 (define-key tern-mode-keymap (kbd "M-.") nil)
 (define-key tern-mode-keymap (kbd "M-,") nil)
-
-
