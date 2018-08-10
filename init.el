@@ -93,6 +93,14 @@
   :hook ((typescript-mode . tide-setup)
          (typescript-mode . tide-hl-identifier-mode)
          (before-save . tide-format-before-save)))
+(use-package cider
+  :ensure t
+  )
+(use-package slime
+  :ensure t
+  :config
+  (add-to-list 'slime-contribs 'slime-repl)
+  )
 (use-package org
   :pin org
   :ensure t
@@ -115,9 +123,15 @@
                                      (clojure . t)
                                      (sagemath . t)
                                      (calc . t)
+                                     (lisp . t)
                                      (python . t))))
+  (setq inferior-lisp-program (executable-find "sbcl"))
   (setq org-babel-python-command "python3")
- 
+  (require 'ob-clojure)
+  (setq org-babel-clojure-backend 'cider)
+  (require 'cider)
+
+  
   :config
   (global-set-key [f10] 'org-capture)
   (setq org-capture-templates
@@ -548,7 +562,6 @@ BEG and END default to the buffer boundaries."
  '(ein:jupyter-default-notebook-directory "~/projects")
  '(ein:slice-image t)
  '(ess-language "R" t)
- '(fci-rule-color "#969896")
  '(notmuch-fcc-dirs (quote (("robert.blackwell@fau.de" . "fau/Sent"))))
  '(notmuch-poll-script "notmuch-poll.sh")
  '(nrepl-message-colors
@@ -559,7 +572,7 @@ BEG and END default to the buffer boundaries."
     ("~/projects/manuscripts/motorspaper/plots.org" "~/projects/manuscripts/motorspaper/molmot_rb/plots.org")))
  '(package-selected-packages
    (quote
-    (desktop-environment exwm xelb ob-sagemath ox-pandoc org-ref htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk ein anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin counsel use-package org-download multiple-cursors dired-sidebar counsel-spotify auctex)))
+    (cider desktop-environment exwm xelb ob-sagemath ox-pandoc org-ref htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk ein anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin counsel use-package org-download multiple-cursors dired-sidebar counsel-spotify auctex)))
  '(pdf-view-midnight-colors (quote ("#969896" . "#f8eec7")))
  '(preview-default-document-pt 12)
  '(request-backend (quote url-retrieve))
@@ -571,36 +584,13 @@ BEG and END default to the buffer boundaries."
  '(tex-fold-linebreaks-rebind-characters nil)
  '(tex-fold-linebreaks-sentence-end-punctuation (quote (("." . ".") ("?" . "?") ("!" . "!"))))
  '(tool-bar-mode nil)
- '(tramp-syntax (quote default) nil (tramp))
- '(vc-annotate-background "#b0cde7")
- '(vc-annotate-color-map
-   (quote
-    ((20 . "#969896")
-     (40 . "#183691")
-     (60 . "#969896")
-     (80 . "#969896")
-     (100 . "#969896")
-     (120 . "#a71d5d")
-     (140 . "#969896")
-     (160 . "#969896")
-     (180 . "#969896")
-     (200 . "#969896")
-     (220 . "#63a35c")
-     (240 . "#0086b3")
-     (260 . "#795da3")
-     (280 . "#969896")
-     (300 . "#0086b3")
-     (320 . "#969896")
-     (340 . "#a71d5d")
-     (360 . "#969896"))))
- '(vc-annotate-very-old-color "#969896"))
+ '(tramp-syntax (quote default) nil (tramp)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Input Mono" :foundry "nil" :slant normal :weight medium :height 90 :width narrow))))
  '(preview-reference-face ((t nil))))
 
 ;; mac specific shit
