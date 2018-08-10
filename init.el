@@ -353,12 +353,20 @@ BEG and END default to the buffer boundaries."
   (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
   (global-set-key (kbd "C-x C-f") #'helm-find-files)
   (global-set-key (kbd "C-c h") 'helm-command-prefix)
-  (global-set-key (kbd "C-x b") 'helm-buffers-list)
-  (global-set-key (kbd "C-c i") 'helm-imenu)
+
   (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) 
   (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) 
   (define-key helm-map (kbd "C-z")  'helm-select-action) 
-  
+  ;; (helm-autoresize-mode t)
+  (setq helm-M-x-fuzzy-match t)
+  (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+
+  (global-set-key (kbd "C-x b") 'helm-mini)
+  (setq helm-buffers-fuzzy-matching t
+      helm-recentf-fuzzy-match    t)
+  (setq helm-semantic-fuzzy-match t
+      helm-imenu-fuzzy-match    t)
+  (global-set-key (kbd "C-c h o") 'helm-occur)
   (helm-mode 1)
   )
 (use-package helm-swoop
