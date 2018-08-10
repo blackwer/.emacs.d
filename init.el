@@ -228,20 +228,20 @@ BEG and END default to the buffer boundaries."
   (setenv "SAGE_ROOT" "/home/rblack/.miniconda3/envs/sage")
   (setenv "SAGE_LOCAL" "/home/rblack/.miniconda3/envs/sage")
   )
-(use-package org-ref
-  :ensure t
-  :after org
-  :init
-  (setq org-ref-completion-library 'org-ref-ivy-cite)
-  (setq org-ref-default-bibliography '("~/projects/misc/bibliography/globalrefs.bib")
-        org-ref-pdf-directory "~/projects/misc/bibliography/bibtex-pdfs/"
-        org-ref-bibliography-notes "~/projects/misc/bibliography/notes.org")
-  (setq org-latex-pdf-process
-        '("pdflatex -interaction nonstopmode -output-directory %o %f"
-	      "bibtex %b"
-	      "pdflatex -interaction nonstopmode -output-directory %o %f"
-	      "pdflatex -interaction nonstopmode -output-directory %o %f"))
-  )
+;; (use-package org-ref
+;;   :ensure t
+;;   :after org
+;;   :init
+;;   (setq org-ref-completion-library 'org-ref-ivy-cite)
+;;   (setq org-ref-default-bibliography '("~/projects/misc/bibliography/globalrefs.bib")
+;;         org-ref-pdf-directory "~/projects/misc/bibliography/bibtex-pdfs/"
+;;         org-ref-bibliography-notes "~/projects/misc/bibliography/notes.org")
+;;   (setq org-latex-pdf-process
+;;         '("pdflatex -interaction nonstopmode -output-directory %o %f"
+;; 	      "bibtex %b"
+;; 	      "pdflatex -interaction nonstopmode -output-directory %o %f"
+;; 	      "pdflatex -interaction nonstopmode -output-directory %o %f"))
+;;   )
 (use-package ox-pandoc
   :ensure t
   :after org
@@ -345,74 +345,98 @@ BEG and END default to the buffer boundaries."
 (use-package light-soap-theme
   :ensure t
   :defer t)
-(use-package google-this
+(use-package helm
   :ensure t
   :config
-  (global-set-key [f6] 'google-this-search))
-(use-package ivy-hydra
-  :ensure t)
-(use-package ivy-bibtex
-  :ensure t)
-(use-package swiper
-  :ensure t
-  :config
-  (global-set-key "\C-s" 'swiper))
-(use-package ivy
-  :ensure t
-  :config
-  (setq ivy-use-virtual-buffers t)
-  (global-set-key (kbd "C-c C-r") 'ivy-resume)
-  (global-set-key (kbd "<f6>") 'ivy-resume)
-  (global-set-key (kbd "C-c b") 'ivy-bibtex)
-
-  (ivy-add-actions t
-                   '(("I" (lambda (x) (with-ivy-window (insert x))) "insert")))
-  (ivy-add-actions 'counsel-find-file
-                   '(("F" (lambda (x) (with-ivy-window (insert (file-relative-name x))))
-                      "insert relative file name")
-                     ("B" (lambda (x)
-                            (with-ivy-window
-                              (insert (file-name-nondirectory (replace-regexp-in-string "/\\'" "" x)))))
-                      "insert file name without any directory information")))
-  (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
-  (eval-after-load "swiper"
-    '(progn
-       (define-key swiper-map (kbd "C-.")
-         (lambda () (interactive) (insert (format "\\<%s\\>" (with-ivy-window (thing-at-point 'symbol))))))
-       (define-key swiper-map (kbd "M-.")
-         (lambda () (interactive) (insert (format "\\<%s\\>" (with-ivy-window (thing-at-point 'word))))))
-       ))
+  (require 'helm-config)
+  (global-set-key (kbd "M-x") 'helm-M-x)
+  (global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
+  (global-set-key (kbd "C-x C-f") #'helm-find-files)
+  (global-set-key (kbd "C-c h") 'helm-command-prefix)
+  (global-set-key (kbd "C-x b") 'helm-buffers-list)
+  (global-set-key (kbd "C-c i") 'helm-imenu)
+  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) 
+  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) 
+  (define-key helm-map (kbd "C-z")  'helm-select-action) 
+  
+  (helm-mode 1)
   )
-(use-package counsel
+(use-package helm-swoop
   :ensure t
   :config
-  (global-set-key (kbd "M-x") 'counsel-M-x)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-  (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-  (global-set-key (kbd "<f1> l") 'counsel-find-library)
-  (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-  (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-  (global-set-key (kbd "C-c g") 'counsel-git)
-  (global-set-key (kbd "C-c j") 'counsel-git-grep)
-  (global-set-key (kbd "C-c k") 'counsel-ag)
-  (global-set-key (kbd "C-x l") 'counsel-locate)
-  (global-set-key (kbd "C-c i") 'counsel-imenu))
-(use-package counsel-gtags
+  (global-set-key (kbd "C-s") 'helm-swoop)
+  )
+(use-package helm-ag
+  :ensure t)
+(use-package helm-ls-git
   :ensure t
-  :after counsel)
+  :config
+  (global-set-key (kbd "C-c p f") 'helm-ls-git-ls)
+  )
+;; (use-package ivy-hydra
+;;   :ensure t)
+;; (use-package ivy-bibtex
+;;   :ensure t)
+;; (use-package swiper
+;;   :ensure t
+;;   :config
+;;   (global-set-key "\C-s" 'swiper))
+;; (use-package ivy
+;;   :ensure t
+;;   :config
+;;   (setq ivy-use-virtual-buffers t)
+;;   (global-set-key (kbd "C-c C-r") 'ivy-resume)
+;;   (global-set-key (kbd "<f6>") 'ivy-resume)
+;;   (global-set-key (kbd "C-c b") 'ivy-bibtex)
+
+;;   (ivy-add-actions t
+;;                    '(("I" (lambda (x) (with-ivy-window (insert x))) "insert")))
+;;   (ivy-add-actions 'counsel-find-file
+;;                    '(("F" (lambda (x) (with-ivy-window (insert (file-relative-name x))))
+;;                       "insert relative file name")
+;;                      ("B" (lambda (x)
+;;                             (with-ivy-window
+;;                               (insert (file-name-nondirectory (replace-regexp-in-string "/\\'" "" x)))))
+;;                       "insert file name without any directory information")))
+;;   (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
+;;   (eval-after-load "swiper"
+;;     '(progn
+;;        (define-key swiper-map (kbd "C-.")
+;;          (lambda () (interactive) (insert (format "\\<%s\\>" (with-ivy-window (thing-at-point 'symbol))))))
+;;        (define-key swiper-map (kbd "M-.")
+;;          (lambda () (interactive) (insert (format "\\<%s\\>" (with-ivy-window (thing-at-point 'word))))))
+;;        ))
+;;   )
+;; (use-package counsel
+;;   :ensure t
+;;   :config
+;;   (global-set-key (kbd "M-x") 'counsel-M-x)
+;;   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+;;   (global-set-key (kbd "<f1> f") 'counsel-describe-function)
+;;   (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+;;   (global-set-key (kbd "<f1> l") 'counsel-find-library)
+;;   (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+;;   (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+;;   (global-set-key (kbd "C-c g") 'counsel-git)
+;;   (global-set-key (kbd "C-c j") 'counsel-git-grep)
+;;   (global-set-key (kbd "C-c k") 'counsel-ag)
+;;   (global-set-key (kbd "C-x l") 'counsel-locate)
+;;   (global-set-key (kbd "C-c i") 'counsel-imenu))
+;; (use-package counsel-gtags
+;;   :ensure t
+;;   :after counsel)
 (use-package applescript-mode
   :ensure t)
 (use-package yaml-mode
   :ensure t)
-(use-package counsel-spotify
-  :ensure t
-  :after counsel
-  :config
-  (setq counsel-spotify-client-id "9ad04a34fc0d463faac74bd7f8295099")
-  (setq counsel-spotify-client-secret "32014a3690f64c48ac3f7c27e7c66a31")
-  (global-set-key [f7] 'counsel-spotify-previous)
-  (global-set-key [f8] 'counsel-spotify-next))
+;; (use-package counsel-spotify
+;;   :ensure t
+;;   :after counsel
+;;   :config
+;;   (setq counsel-spotify-client-id "9ad04a34fc0d463faac74bd7f8295099")
+;;   (setq counsel-spotify-client-secret "32014a3690f64c48ac3f7c27e7c66a31")
+;;   (global-set-key [f7] 'counsel-spotify-previous)
+;;   (global-set-key [f8] 'counsel-spotify-next))
 (use-package smartparens
   :ensure t)
 (use-package selectric-mode
@@ -455,14 +479,14 @@ BEG and END default to the buffer boundaries."
 (use-package ipython
   :ensure t
   :after python-mode)
-(use-package function-args
-  :ensure t)
 (use-package flycheck
   :ensure t)
 (use-package exec-path-from-shell
   :ensure t)
-(use-package elpy
-  :ensure t)
+;; (use-package function-args
+;;   :ensure t)
+;; (use-package elpy
+;;   :ensure t)
 (use-package elm-yasnippets
   :ensure t)
 (use-package elm-mode
@@ -494,8 +518,8 @@ BEG and END default to the buffer boundaries."
   :ensure t)
 (use-package buffer-move
   :ensure t)
-(use-package anaphora
-  :ensure t)
+;; (use-package anaphora
+;;   :ensure t)
 (use-package wttrin
   :ensure t
   :config
@@ -520,7 +544,6 @@ BEG and END default to the buffer boundaries."
 (global-set-key (kbd "C-x T") '(lambda () (interactive) (eshell 't)))
 (global-set-key [f9] 'toggle-window-dedicated)
 (global-set-key (kbd "C-c p f") 'counsel-git)
-(global-set-key (kbd "C-:") 'complete-symbol)
 (global-set-key (kbd "s-p") nil) ; no printing
 (global-set-key (kbd "C-z") nil) ; no background
 (global-set-key (kbd "s-w") nil) ; no closing
@@ -572,7 +595,7 @@ BEG and END default to the buffer boundaries."
     ("~/projects/manuscripts/motorspaper/plots.org" "~/projects/manuscripts/motorspaper/molmot_rb/plots.org")))
  '(package-selected-packages
    (quote
-    (cider desktop-environment exwm xelb ob-sagemath ox-pandoc org-ref htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk ein anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin counsel use-package org-download multiple-cursors dired-sidebar counsel-spotify auctex)))
+    (helm-themes helm-ag helm-ls-git helm-swoop cider desktop-environment exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk ein anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
  '(pdf-view-midnight-colors (quote ("#969896" . "#f8eec7")))
  '(preview-default-document-pt 12)
  '(request-backend (quote url-retrieve))
@@ -772,11 +795,11 @@ BEG and END default to the buffer boundaries."
 (make-face 'mode-line-80col-face)
 
 (set-face-attribute 'mode-line nil
-                    :foreground "gray60" :background "gray20"
+                    ;; :foreground "gray60" :background "gray20"
                     :inverse-video nil
                     :box '(:line-width 2 :color "gray20" :style nil))
 (set-face-attribute 'mode-line-inactive nil
-                    :foreground "gray80" :background "gray40"
+                    ;; :foreground "gray80" :background "gray40"
                     :inverse-video nil
                     :box '(:line-width 2 :color "gray40" :style nil))
 
@@ -786,39 +809,35 @@ BEG and END default to the buffer boundaries."
                     :box '(:line-width 2 :color "#4271ae"))
 (set-face-attribute 'mode-line-modified-face nil
                     :inherit 'mode-line-face
-                    :foreground "#c82829"
-                    :background "#ffffff"
+                    ;; :foreground "#c82829" :background "#ffffff"
                     :box '(:line-width 2 :color "#c82829"))
 (set-face-attribute 'mode-line-folder-face nil
                     :inherit 'mode-line-face
-                    :foreground "gray60")
+                    ;; :foreground "gray60"
+                    )
 (set-face-attribute 'mode-line-filename-face nil
                     :inherit 'mode-line-face
-                    :foreground "#eab700"
+                    ;; :foreground "#eab700"
                     :weight 'bold)
 (set-face-attribute 'mode-line-position-face nil
                     :inherit 'mode-line-face
                     :family "Input Mono" :height 80)
 (set-face-attribute 'mode-line-mode-face nil
                     :inherit 'mode-line-face
-                    :foreground "gray80")
+                    ;; :foreground "gray80"
+                    )
 (set-face-attribute 'mode-line-minor-mode-face nil
                     :inherit 'mode-line-mode-face
-                    :foreground "gray40"
+                    ;; :foreground "gray40"
                     :height 110)
 (set-face-attribute 'mode-line-process-face nil
                     :inherit 'mode-line-face
-                    :foreground "#718c00")
+                    ;; :foreground "#718c00"
+                    )
 (set-face-attribute 'mode-line-80col-face nil
                     :inherit 'mode-line-position-face
-                    :foreground "black" :background "#eab700")
-
-
-;; ===== Scrolling fix for advanced mouses =============================
-;; (defun up-slightly () (interactive) (scroll-up 3))
-;; (defun down-slightly () (interactive) (scroll-down 3))
-;; (global-set-key [mouse-8] 'down-slightly)
-;; (global-set-key [mouse-9] 'up-slightly)
+                    ;; :foreground "black" :background "#eab700"
+                    )
 
 
 (setq vc-ignore-dir-regexp
@@ -855,9 +874,6 @@ BEG and END default to the buffer boundaries."
 (add-hook 'ein:connect-mode-hook 'ein:jedi-setup)
 
 
-(ivy-mode 1)
-
-
 (add-to-list 'auto-mode-alist '("\\.m\\'" . octave-mode))
 
 
@@ -890,7 +906,7 @@ BEG and END default to the buffer boundaries."
              (local-set-key (kbd "TAB") 'self-insert-command)
              (local-set-key (kbd "C-c w") 'tw2-toggle-dev)
              (local-set-key (kbd "C-c o") 'tw2-open)
-             (local-set-key (kbd "C-c i") 'ivy-imenu-anywhere)
+             ;; (local-set-key (kbd "C-c i") 'ivy-imenu-anywhere)
              (setq imenu-generic-expression tw2-imenu-generic-expression)
              (visual-line-mode t)
              (smartparens-mode)
