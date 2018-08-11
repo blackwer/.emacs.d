@@ -51,6 +51,10 @@
   (exwm-config-default)
   (require 'exwm-systemtray)
   (exwm-systemtray-enable)
+
+  ;; Allow resizing of certain windows that were being dicks
+  (setq window-divider-default-right-width 1)
+  (window-divider-mode)
   )
 (use-package desktop-environment
   :ensure t
@@ -381,6 +385,9 @@ BEG and END default to the buffer boundaries."
   :config
   (global-set-key (kbd "C-c p f") 'helm-ls-git-ls)
   )
+(use-package helm-themes
+  :ensure t
+  )
 ;; (use-package ivy-hydra
 ;;   :ensure t)
 ;; (use-package ivy-bibtex
@@ -593,6 +600,7 @@ BEG and END default to the buffer boundaries."
  '(ein:jupyter-default-notebook-directory "~/projects")
  '(ein:slice-image t)
  '(ess-language "R" t)
+ '(fci-rule-color "#969896")
  '(notmuch-fcc-dirs (quote (("robert.blackwell@fau.de" . "fau/Sent"))))
  '(notmuch-poll-script "notmuch-poll.sh")
  '(nrepl-message-colors
@@ -603,7 +611,7 @@ BEG and END default to the buffer boundaries."
     ("~/projects/manuscripts/motorspaper/plots.org" "~/projects/manuscripts/motorspaper/molmot_rb/plots.org")))
  '(package-selected-packages
    (quote
-    (helm-themes helm-ag helm-ls-git helm-swoop cider desktop-environment exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk ein anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
+    (helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest desktop-environment exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk ein anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
  '(pdf-view-midnight-colors (quote ("#969896" . "#f8eec7")))
  '(preview-default-document-pt 12)
  '(request-backend (quote url-retrieve))
@@ -615,13 +623,36 @@ BEG and END default to the buffer boundaries."
  '(tex-fold-linebreaks-rebind-characters nil)
  '(tex-fold-linebreaks-sentence-end-punctuation (quote (("." . ".") ("?" . "?") ("!" . "!"))))
  '(tool-bar-mode nil)
- '(tramp-syntax (quote default) nil (tramp)))
+ '(tramp-syntax (quote default) nil (tramp))
+ '(vc-annotate-background "#b0cde7")
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#969896")
+     (40 . "#183691")
+     (60 . "#969896")
+     (80 . "#969896")
+     (100 . "#969896")
+     (120 . "#a71d5d")
+     (140 . "#969896")
+     (160 . "#969896")
+     (180 . "#969896")
+     (200 . "#969896")
+     (220 . "#63a35c")
+     (240 . "#0086b3")
+     (260 . "#795da3")
+     (280 . "#969896")
+     (300 . "#0086b3")
+     (320 . "#969896")
+     (340 . "#a71d5d")
+     (360 . "#969896"))))
+ '(vc-annotate-very-old-color "#969896"))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(default ((t (:family "Input Mono" :foundry "nil" :slant normal :weight medium :height 90 :width narrow))))
  '(preview-reference-face ((t nil))))
 
 ;; mac specific shit
@@ -683,8 +714,16 @@ BEG and END default to the buffer boundaries."
                             (flycheck-mode)
                             ))
 
+(add-hook 'lisp-mode-hook
+          '(lambda ()
+             (make-local-variable 'lisp-indent-function)
+             (setq lisp-indent-function 'common-lisp-indent-function)
+             (paredit-mode t)
+             (rainbow-delimiters-mode)
+             ))
+
 (add-hook 'python-mode-hook '(lambda ()
-                               (elpy-mode)
+                               ;; (elpy-mode)
                                (anaconda-mode)
                                (yas-minor-mode)
                                (smartparens-mode)
@@ -944,3 +983,4 @@ BEG and END default to the buffer boundaries."
 (require 'tern)
 (define-key tern-mode-keymap (kbd "M-.") nil)
 (define-key tern-mode-keymap (kbd "M-,") nil)
+
