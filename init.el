@@ -20,6 +20,10 @@
 (eval-when-compile
   (require 'use-package))
 
+(use-package clojure-mode
+  :ensure t)
+(use-package ob-clojurescript
+  :ensure t)
 ;; A nice sidebar package
 (use-package dired-sidebar
   :ensure t
@@ -125,6 +129,7 @@
    'org-babel-load-languages (quote ((emacs-lisp . t)
                                      (sqlite . t)
                                      (clojure . t)
+                                     (clojurescript . t)
                                      (sagemath . t)
                                      (calc . t)
                                      (lisp . t)
@@ -558,7 +563,7 @@ BEG and END default to the buffer boundaries."
 (global-set-key (kbd "C-x t") 'eshell)
 (global-set-key (kbd "C-x T") '(lambda () (interactive) (eshell 't)))
 (global-set-key [f9] 'toggle-window-dedicated)
-(global-set-key (kbd "C-c p f") 'counsel-git)
+(global-set-key (kbd "C-c p f") 'helm-ls-git-ls)
 (global-set-key (kbd "s-p") nil) ; no printing
 (global-set-key (kbd "C-z") nil) ; no background
 (global-set-key (kbd "s-w") nil) ; no closing
