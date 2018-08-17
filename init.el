@@ -326,10 +326,9 @@ BEG and END default to the buffer boundaries."
 
 (use-package leuven-theme
   :ensure t
-  :init
+  :config
   (set-cursor-color "#6666ff")
-  ;; :defer t
-  )
+  :defer t)
 (use-package zenburn-theme
   :ensure t
   :defer t)
