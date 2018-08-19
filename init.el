@@ -19,7 +19,14 @@
 
 (eval-when-compile
   (require 'use-package))
-
+(use-package aggressive-indent
+  :ensure t)
+(use-package yasnippet
+  :ensure t)
+(use-package common-lisp-snippets
+  :ensure t
+  :config
+  (require 'common-lisp-snippets))
 (use-package clojure-mode
   :ensure t)
 (use-package ob-clojurescript
@@ -118,7 +125,7 @@
                  '("revtex4-1"
                    "\\documentclass{revtex4-1}"
                    ("\\section{%s}" . "\\section*{%s}"))))
-  (add-hook 'iESS-mode-hook 
+  (add-hook 'iESS-mode-hook
             (local-set-key (kbd "[?\\t]") 'complete-at-point)
             )
   (setq org-confirm-babel-evaluate nil
@@ -140,7 +147,7 @@
   (setq org-babel-clojure-backend 'cider)
   (require 'cider)
 
-  
+
   :config
   (global-set-key [f10] 'org-capture)
   (setq org-capture-templates
@@ -154,11 +161,11 @@
     (setq image-file-name-extensions
           (quote
            ("png" "jpeg" "jpg" "gif" "tiff" "tif" "xbm" "xpm" "pbm" "pgm" "ppm" "pnm" "svg" "pdf" "bmp")))
-    
+
     (setq org-image-actual-width 600)
-    
+
     (setq org-imagemagick-display-command "convert -density 600 \"%s\" -thumbnail \"%sx%s>\" \"%s\"")
-    
+
     (defun org-display-inline-images (&optional include-linked refresh beg end)
       "Display inline images.
 Normally only links without a description part are inlined, because this
@@ -261,7 +268,7 @@ BEG and END default to the buffer boundaries."
   :init
   (add-hook 'org-mode-hook
             '(lambda ()
-               (if (buffer-file-name) 
+               (if (buffer-file-name)
                    (setq org-download-image-dir
                          (concat (file-name-sans-extension (buffer-file-name)) "-org-images"))
                  (setq org-download-image-dir "org-images")))))
@@ -277,7 +284,7 @@ BEG and END default to the buffer boundaries."
   (use-package auctex-latexmk :ensure t)
   (require 'auctex-latexmk)
   (auctex-latexmk-setup)
-  
+
   (add-hook 'LaTeX-mode-hook 'visual-line-mode)
 
   (require 'tex-fold-linebreaks)
@@ -314,7 +321,7 @@ BEG and END default to the buffer boundaries."
   ;; to have the buffer refresh after compilation
   (add-hook 'TeX-after-compilation-finished-functions
             'TeX-revert-document-buffer)
-  
+
   (add-hook 'TeX-mode-hook '(lambda ()
                               (company-mode)
                               (make-local-variable 'company-backends)
@@ -335,22 +342,10 @@ BEG and END default to the buffer boundaries."
 (use-package github-theme
   :ensure t
   :defer t)
-(use-package color-theme-sanityinc-solarized
-  :ensure t
-  :defer t)
-(use-package color-theme-sanityinc-tomorrow
-  :ensure t
-  :defer t)
 (use-package spacemacs-theme
   :ensure t
   :defer t)
-(use-package sunny-day-theme
-  :ensure t
-  :defer t)
 (use-package monokai-theme
-  :ensure t
-  :defer t)
-(use-package light-soap-theme
   :ensure t
   :defer t)
 (use-package helm
@@ -362,9 +357,9 @@ BEG and END default to the buffer boundaries."
   (global-set-key (kbd "C-x C-f") #'helm-find-files)
   (global-set-key (kbd "C-c h") 'helm-command-prefix)
 
-  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) 
-  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) 
-  (define-key helm-map (kbd "C-z")  'helm-select-action) 
+  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
+  (define-key helm-map (kbd "C-z")  'helm-select-action)
   ;; (helm-autoresize-mode t)
   (setq helm-M-x-fuzzy-match t)
   (global-set-key (kbd "M-y") 'helm-show-kill-ring)
@@ -392,73 +387,11 @@ BEG and END default to the buffer boundaries."
 (use-package helm-themes
   :ensure t
   )
-;; (use-package ivy-hydra
-;;   :ensure t)
-;; (use-package ivy-bibtex
-;;   :ensure t)
-;; (use-package swiper
-;;   :ensure t
-;;   :config
-;;   (global-set-key "\C-s" 'swiper))
-;; (use-package ivy
-;;   :ensure t
-;;   :config
-;;   (setq ivy-use-virtual-buffers t)
-;;   (global-set-key (kbd "C-c C-r") 'ivy-resume)
-;;   (global-set-key (kbd "<f6>") 'ivy-resume)
-;;   (global-set-key (kbd "C-c b") 'ivy-bibtex)
-
-;;   (ivy-add-actions t
-;;                    '(("I" (lambda (x) (with-ivy-window (insert x))) "insert")))
-;;   (ivy-add-actions 'counsel-find-file
-;;                    '(("F" (lambda (x) (with-ivy-window (insert (file-relative-name x))))
-;;                       "insert relative file name")
-;;                      ("B" (lambda (x)
-;;                             (with-ivy-window
-;;                               (insert (file-name-nondirectory (replace-regexp-in-string "/\\'" "" x)))))
-;;                       "insert file name without any directory information")))
-;;   (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
-;;   (eval-after-load "swiper"
-;;     '(progn
-;;        (define-key swiper-map (kbd "C-.")
-;;          (lambda () (interactive) (insert (format "\\<%s\\>" (with-ivy-window (thing-at-point 'symbol))))))
-;;        (define-key swiper-map (kbd "M-.")
-;;          (lambda () (interactive) (insert (format "\\<%s\\>" (with-ivy-window (thing-at-point 'word))))))
-;;        ))
-;;   )
-;; (use-package counsel
-;;   :ensure t
-;;   :config
-;;   (global-set-key (kbd "M-x") 'counsel-M-x)
-;;   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-;;   (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-;;   (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-;;   (global-set-key (kbd "<f1> l") 'counsel-find-library)
-;;   (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-;;   (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-;;   (global-set-key (kbd "C-c g") 'counsel-git)
-;;   (global-set-key (kbd "C-c j") 'counsel-git-grep)
-;;   (global-set-key (kbd "C-c k") 'counsel-ag)
-;;   (global-set-key (kbd "C-x l") 'counsel-locate)
-;;   (global-set-key (kbd "C-c i") 'counsel-imenu))
-;; (use-package counsel-gtags
-;;   :ensure t
-;;   :after counsel)
 (use-package applescript-mode
   :ensure t)
 (use-package yaml-mode
   :ensure t)
-;; (use-package counsel-spotify
-;;   :ensure t
-;;   :after counsel
-;;   :config
-;;   (setq counsel-spotify-client-id "9ad04a34fc0d463faac74bd7f8295099")
-;;   (setq counsel-spotify-client-secret "32014a3690f64c48ac3f7c27e7c66a31")
-;;   (global-set-key [f7] 'counsel-spotify-previous)
-;;   (global-set-key [f8] 'counsel-spotify-next))
 (use-package smartparens
-  :ensure t)
-(use-package selectric-mode
   :ensure t)
 (use-package request-deferred
   :ensure t)
@@ -502,12 +435,6 @@ BEG and END default to the buffer boundaries."
   :ensure t)
 (use-package exec-path-from-shell
   :ensure t)
-;; (use-package function-args
-;;   :ensure t)
-;; (use-package elpy
-;;   :ensure t)
-(use-package elm-yasnippets
-  :ensure t)
 (use-package elm-mode
   :ensure t
   :config
@@ -521,7 +448,7 @@ BEG and END default to the buffer boundaries."
   (use-package company-cmake :ensure t)
   (use-package company-c-headers :ensure t)
   (use-package company-auctex :ensure t)
-  
+
   (define-key company-mode-map (kbd "M-TAB") 'company-complete-common)
   (define-key company-active-map (kbd "M-TAB") 'company-complete-common)
 
@@ -566,7 +493,7 @@ BEG and END default to the buffer boundaries."
 (global-set-key (kbd "s-p") nil) ; no printing
 (global-set-key (kbd "C-z") nil) ; no background
 (global-set-key (kbd "s-w") nil) ; no closing
-
+(global-set-key (kbd "M-z") 'zap-up-to-char) 
 
 ;; Let me kill buffers and downcase shit
 (put 'erase-buffer 'disabled nil)
@@ -603,19 +530,20 @@ BEG and END default to the buffer boundaries."
     ("9a155066ec746201156bb39f7518c1828a73d67742e11271e4f24b7b178c4710" "ba7917b02812fee8da4827fdf7867d3f6f282694f679b5d73f9965f45590843a" "c72a772c104710300103307264c00a04210c00f6cc419a79b8af7890478f380e" "d5f17ae86464ef63c46ed4cb322703d91e8ed5e718bf5a7beb69dd63352b26b2" "a0dc0c1805398db495ecda1994c744ad1a91a9455f2a17b59b716f72d3585dde" "ad9747dc51ca23d1c1382fa9bd5d76e958a5bfe179784989a6a666fe801aadf2" "807a7f4c2d0d331fc1798e6d38b890ce3582096b8d622ba3b491b2aa4345e962" "bf64dd3657eef02b3b5f7439d452c7b18f4b5c1e717e6037c8f2b61b9b3dbcf8" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "40f6a7af0dfad67c0d4df2a1dd86175436d79fc69ea61614d668a635c2cd94ab" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "b9183de9666c3a16a7ffa7faaa8e9941b8d0ab50f9aaba1ca49f2f3aec7e3be9" "efb148b9a120f417464713fe6cad47eb708dc45c7f2dbfeea4a7ec329214e63e" "e80932ca56b0f109f8545576531d3fc79487ca35a9a9693b62bf30d6d08c9aaf" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "60f04e478dedc16397353fb9f33f0d895ea3dab4f581307fbf0aa2f07e658a40" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "9370aeac615012366188359cb05011aea721c73e1cb194798bc18576025cabeb" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" default)))
  '(ein:jupyter-default-notebook-directory "~/projects")
  '(ein:slice-image t)
+ '(eshell-visual-commands
+   (quote
+    ("htop" "vi" "screen" "top" "less" "more" "lynx" "ncftp" "pine" "tin" "trn" "elm")))
  '(ess-language "R" t)
- '(fci-rule-color "#969896")
+ '(flycheck-color-mode-line-face-to-color (quote mode-line-buffer-id))
+ '(frame-background-mode (quote dark))
  '(notmuch-fcc-dirs (quote (("robert.blackwell@fau.de" . "fau/Sent"))))
  '(notmuch-poll-script "notmuch-poll.sh")
- '(nrepl-message-colors
-   (quote
-    ("#183691" "#969896" "#a71d5d" "#969896" "#0086b3" "#795da3" "#a71d5d" "#969896")))
  '(org-agenda-files
    (quote
     ("~/projects/manuscripts/motorspaper/plots.org" "~/projects/manuscripts/motorspaper/molmot_rb/plots.org")))
  '(package-selected-packages
    (quote
-    (helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest desktop-environment exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk ein anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
+    (aggressive-indent common-lisp-snippets graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest desktop-environment exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk ein anaconda-mode markdown-mode fortpy imenu-anywhere github-theme org monokai-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
  '(pdf-view-midnight-colors (quote ("#969896" . "#f8eec7")))
  '(preview-default-document-pt 12)
  '(request-backend (quote url-retrieve))
@@ -627,29 +555,7 @@ BEG and END default to the buffer boundaries."
  '(tex-fold-linebreaks-rebind-characters nil)
  '(tex-fold-linebreaks-sentence-end-punctuation (quote (("." . ".") ("?" . "?") ("!" . "!"))))
  '(tool-bar-mode nil)
- '(tramp-syntax (quote default) nil (tramp))
- '(vc-annotate-background "#b0cde7")
- '(vc-annotate-color-map
-   (quote
-    ((20 . "#969896")
-     (40 . "#183691")
-     (60 . "#969896")
-     (80 . "#969896")
-     (100 . "#969896")
-     (120 . "#a71d5d")
-     (140 . "#969896")
-     (160 . "#969896")
-     (180 . "#969896")
-     (200 . "#969896")
-     (220 . "#63a35c")
-     (240 . "#0086b3")
-     (260 . "#795da3")
-     (280 . "#969896")
-     (300 . "#0086b3")
-     (320 . "#969896")
-     (340 . "#a71d5d")
-     (360 . "#969896"))))
- '(vc-annotate-very-old-color "#969896"))
+ '(tramp-syntax (quote default) nil (tramp)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -723,7 +629,11 @@ BEG and END default to the buffer boundaries."
              (make-local-variable 'lisp-indent-function)
              (setq lisp-indent-function 'common-lisp-indent-function)
              (paredit-mode t)
+             (aggressive-indent-mode t)
              (rainbow-delimiters-mode)
+             (make-variable-buffer-local 'tab-always-indent)
+             (setq tab-always-indent 'complete)
+             (yas-minor-mode t)
              ))
 
 (add-hook 'python-mode-hook '(lambda ()
@@ -899,7 +809,7 @@ BEG and END default to the buffer boundaries."
 
 (auto-insert-mode)
  ;; *NOTE* Trailing slash important
-(setq auto-insert-directory (concat (getenv "HOME") "/projects/misc/templates/")) 
+(setq auto-insert-directory (concat (getenv "HOME") "/projects/misc/templates/"))
 (setq auto-insert-query nil)
 (define-auto-insert "\\.tex$" "latex-template.tex")
 (define-auto-insert "\\Makefile$" "Makefile-template")
@@ -932,8 +842,8 @@ BEG and END default to the buffer boundaries."
 (setq calendar-longitude 11.0120)
 (setq calendar-location-name "Erlangen, Bayern")
 
-;; (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/ess") 
-;; (require 'ess-site) 
+;; (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/ess")
+;; (require 'ess-site)
 
 (require 'tw2-mode)
 (defun tw2-toggle-dev ()
@@ -988,3 +898,4 @@ BEG and END default to the buffer boundaries."
 (define-key tern-mode-keymap (kbd "M-.") nil)
 (define-key tern-mode-keymap (kbd "M-,") nil)
 
+(load-theme 'tsdh-dark)
