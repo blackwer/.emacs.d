@@ -444,13 +444,12 @@ BEG and END default to the buffer boundaries."
   :ensure t)
 (use-package json-mode
   :ensure t)
-(setq byte-compile-warnings nil)
 (use-package python-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 (use-package ipython
   :ensure t
   :after python-mode)
-(setq byte-compile-warnings t)
 (use-package flycheck
   :ensure t)
 (use-package exec-path-from-shell
