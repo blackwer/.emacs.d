@@ -19,8 +19,21 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+
 (eval-when-compile
   (require 'use-package))
+(use-package async
+  :ensure t)
+(use-package js2-mode
+  :ensure t)
+(use-package js2-refactor
+  :ensure t)
+(use-package tern
+  :ensure t)
+(use-package paredit
+  :ensure t)
+(use-package rainbow-delimiters
+  :ensure t)
 (use-package graphviz-dot-mode
   :ensure t)
 (use-package aggressive-indent
@@ -283,10 +296,12 @@ BEG and END default to the buffer boundaries."
   (setq message-kill-buffer-on-exit t)
   )
 
+
 (use-package tex
   :ensure auctex
   :config
   (use-package auctex-latexmk :ensure t)
+
   (require 'auctex-latexmk)
   (auctex-latexmk-setup)
 
@@ -392,8 +407,6 @@ BEG and END default to the buffer boundaries."
 (use-package helm-themes
   :ensure t
   )
-(use-package applescript-mode
-  :ensure t)
 (use-package yaml-mode
   :ensure t)
 (use-package smartparens
@@ -431,11 +444,13 @@ BEG and END default to the buffer boundaries."
   :ensure t)
 (use-package json-mode
   :ensure t)
+(setq byte-compile-warnings nil)
 (use-package python-mode
   :ensure t)
 (use-package ipython
   :ensure t
   :after python-mode)
+(setq byte-compile-warnings t)
 (use-package flycheck
   :ensure t)
 (use-package exec-path-from-shell
@@ -447,6 +462,7 @@ BEG and END default to the buffer boundaries."
                             (smartparens-mode)
                             (company-mode)
                             (make-local-variable 'company-backends))))
+
 (use-package company
   :ensure t
   :config
@@ -464,6 +480,9 @@ BEG and END default to the buffer boundaries."
       company-dabbrev-downcase        nil
       )
   )
+
+
+
 
 (use-package cmake-mode
   :ensure t)
@@ -535,20 +554,19 @@ BEG and END default to the buffer boundaries."
     ("9a155066ec746201156bb39f7518c1828a73d67742e11271e4f24b7b178c4710" "ba7917b02812fee8da4827fdf7867d3f6f282694f679b5d73f9965f45590843a" "c72a772c104710300103307264c00a04210c00f6cc419a79b8af7890478f380e" "d5f17ae86464ef63c46ed4cb322703d91e8ed5e718bf5a7beb69dd63352b26b2" "a0dc0c1805398db495ecda1994c744ad1a91a9455f2a17b59b716f72d3585dde" "ad9747dc51ca23d1c1382fa9bd5d76e958a5bfe179784989a6a666fe801aadf2" "807a7f4c2d0d331fc1798e6d38b890ce3582096b8d622ba3b491b2aa4345e962" "bf64dd3657eef02b3b5f7439d452c7b18f4b5c1e717e6037c8f2b61b9b3dbcf8" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "40f6a7af0dfad67c0d4df2a1dd86175436d79fc69ea61614d668a635c2cd94ab" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "b9183de9666c3a16a7ffa7faaa8e9941b8d0ab50f9aaba1ca49f2f3aec7e3be9" "efb148b9a120f417464713fe6cad47eb708dc45c7f2dbfeea4a7ec329214e63e" "e80932ca56b0f109f8545576531d3fc79487ca35a9a9693b62bf30d6d08c9aaf" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "60f04e478dedc16397353fb9f33f0d895ea3dab4f581307fbf0aa2f07e658a40" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "9370aeac615012366188359cb05011aea721c73e1cb194798bc18576025cabeb" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" default)))
  '(ein:jupyter-default-notebook-directory "~/projects")
  '(ein:slice-image t)
- '(eshell-visual-commands
-   (quote
-    ("htop" "vi" "screen" "top" "less" "more" "lynx" "ncftp" "pine" "tin" "trn" "elm")))
  '(ess-language "R" t)
- '(flycheck-color-mode-line-face-to-color (quote mode-line-buffer-id))
- '(frame-background-mode (quote dark))
+ '(fci-rule-color "#969896")
  '(notmuch-fcc-dirs (quote (("robert.blackwell@fau.de" . "fau/Sent"))))
  '(notmuch-poll-script "notmuch-poll.sh")
+ '(nrepl-message-colors
+   (quote
+    ("#183691" "#969896" "#a71d5d" "#969896" "#0086b3" "#795da3" "#a71d5d" "#969896")))
  '(org-agenda-files
    (quote
     ("~/projects/manuscripts/motorspaper/plots.org" "~/projects/manuscripts/motorspaper/molmot_rb/plots.org")))
  '(package-selected-packages
    (quote
-    (gpastel aggressive-indent common-lisp-snippets graphviz-dot-mode  helm clojure-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest desktop-environment exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk ein anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
+    (gpastel common-lisp-snippets aggressive-indent graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest desktop-environment exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk ein anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
  '(pdf-view-midnight-colors (quote ("#969896" . "#f8eec7")))
  '(preview-default-document-pt 12)
  '(request-backend (quote url-retrieve))
@@ -560,14 +578,36 @@ BEG and END default to the buffer boundaries."
  '(tex-fold-linebreaks-rebind-characters nil)
  '(tex-fold-linebreaks-sentence-end-punctuation (quote (("." . ".") ("?" . "?") ("!" . "!"))))
  '(tool-bar-mode nil)
- '(tramp-syntax (quote default) nil (tramp)))
+ '(tramp-syntax (quote default) nil (tramp))
+ '(vc-annotate-background "#b0cde7")
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#969896")
+     (40 . "#183691")
+     (60 . "#969896")
+     (80 . "#969896")
+     (100 . "#969896")
+     (120 . "#a71d5d")
+     (140 . "#969896")
+     (160 . "#969896")
+     (180 . "#969896")
+     (200 . "#969896")
+     (220 . "#63a35c")
+     (240 . "#0086b3")
+     (260 . "#795da3")
+     (280 . "#969896")
+     (300 . "#0086b3")
+     (320 . "#969896")
+     (340 . "#a71d5d")
+     (360 . "#969896"))))
+ '(vc-annotate-very-old-color "#969896"))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Input Mono" :foundry "nil" :slant normal :weight medium :height 90 :width narrow))))
+ '(default ((t (:family "Input Mono" :foundry "nil" :slant normal :weight medium :height 100 :width narrow))))
  '(preview-reference-face ((t nil))))
 
 ;; mac specific shit
