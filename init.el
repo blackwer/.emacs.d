@@ -22,6 +22,14 @@
 
 (eval-when-compile
   (require 'use-package))
+(use-package lsp-ui
+  :ensure t)
+(use-package company-lsp
+  :ensure t)
+(use-package cquery
+  :ensure t)
+(use-package lsp-mode
+  :ensure t)
 (use-package async
   :ensure t)
 (use-package js2-mode
