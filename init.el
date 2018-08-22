@@ -22,6 +22,8 @@
 
 (eval-when-compile
   (require 'use-package))
+(use-package anaconda-mode
+  :ensure t)
 (use-package lsp-ui
   :ensure t)
 (use-package company-lsp
@@ -166,6 +168,7 @@
                                      (sagemath . t)
                                      (calc . t)
                                      (lisp . t)
+                                     (shell . t)
                                      (python . t))))
   (setq inferior-lisp-program (executable-find "sbcl"))
   (setq org-babel-python-command "python3")
@@ -658,6 +661,8 @@ BEG and END default to the buffer boundaries."
                                  (eldoc-mode)
                                  (setq cquery-extra-init-params
                                        '(:completion (:detailedLabel t)))
+                                 (make-local-variable 'company-backends)
+                                 (setq company-backends '((company-lsp)))
                                  (lsp-cquery-enable)
                                  ))
 
