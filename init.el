@@ -23,7 +23,10 @@
 (eval-when-compile
   (require 'use-package))
 (use-package anaconda-mode
-  :ensure t)
+  :ensure t
+  :config
+  (setq python-shell-interpreter "python3")
+  (setq py-shell-name "python3"))
 (use-package lsp-ui
   :ensure t)
 (use-package company-lsp
@@ -64,10 +67,10 @@
 (use-package dired-sidebar
   :ensure t
   :commands (dired-sidebar-toggle-sidebar)
-  :config
-  (use-package all-the-icons-dired
-    ;; M-x all-the-icons-install-fonts
-    :commands (all-the-icons-dired-mode)))
+  :config)
+(use-package all-the-icons-dired
+  ;; M-x all-the-icons-install-fonts
+  :commands (all-the-icons-dired-mode))
 (use-package esh-autosuggest
   :hook (eshell-mode . esh-autosuggest-mode)
   ;; If you have use-package-hook-name-suffix set to nil, uncomment and use the
@@ -576,7 +579,7 @@ BEG and END default to the buffer boundaries."
     ("~/projects/manuscripts/motorspaper/plots.org" "~/projects/manuscripts/motorspaper/molmot_rb/plots.org")))
  '(package-selected-packages
    (quote
-    (gpastel common-lisp-snippets aggressive-indent graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest desktop-environment exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk ein anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
+    (all-the-icons-dired gpastel common-lisp-snippets aggressive-indent graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest desktop-environment exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk ein anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
  '(pdf-view-midnight-colors (quote ("#969896" . "#f8eec7")))
  '(preview-default-document-pt 12)
  '(request-backend (quote url-retrieve))
@@ -956,3 +959,12 @@ BEG and END default to the buffer boundaries."
 (define-key tern-mode-keymap (kbd "M-,") nil)
 
 (load-theme 'tsdh-dark)
+
+(add-to-list 'tramp-remote-path "~/.miniconda3/bin")
+
+(let ((process-environment tramp-remote-process-environment))
+  (setenv "ENV" "$HOME/.profile")
+  (setq tramp-remote-process-environment process-environment))
+
+(add-to-list 'tramp-remote-process-environment
+             (format "DISPLAY=%s" (getenv "DISPLAY")))
