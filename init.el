@@ -36,7 +36,9 @@
 (use-package cquery
   :ensure t)
 (use-package lsp-mode
-  :ensure t)
+  :ensure t
+  :config
+  (setq lsp-ui-sideline-show-hover 'nil))
 (use-package async
   :ensure t)
 (use-package js2-mode
