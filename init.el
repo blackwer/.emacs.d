@@ -399,7 +399,8 @@ BEG and END default to the buffer boundaries."
   (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
   (define-key helm-map (kbd "C-z")  'helm-select-action)
   ;; (helm-autoresize-mode t)
-  (setq helm-M-x-fuzzy-match t)
+  (setq helm-mode-fuzzy-match t)
+  (setq helm-completion-in-region-fuzzy-match t)
   (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 
   (global-set-key (kbd "C-x b") 'helm-mini)
