@@ -76,7 +76,14 @@
   ;; M-x all-the-icons-install-fonts
   :commands (all-the-icons-dired-mode))
 (use-package esh-autosuggest
-  :hook (eshell-mode . esh-autosuggest-mode)
+  :hook (eshell-mode . (lambda ()
+                         (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
+                         (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history)
+                         (make-variable-buffer-local 'helm-turn-on-show-completion) 
+                         (setq helm-turn-on-show-completion nil)
+                         (esh-autosuggest-mode)
+                         (eshell-cmpl-initialize)
+                         ))
   ;; If you have use-package-hook-name-suffix set to nil, uncomment and use the
   ;; line below instead:
   ;; :hook (eshell-mode-hook . esh-autosuggest-mode)
