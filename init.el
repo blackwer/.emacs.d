@@ -973,3 +973,10 @@ BEG and END default to the buffer boundaries."
 (if (equal system-name "0xDEADBEEF")
     (display-battery-mode t))
   
+(add-to-list 'emacs-lisp-mode-hook (lambda ()
+                                     (paredit-mode t)
+                                     (aggressive-indent-mode t)
+                                     (rainbow-delimiters-mode)
+                                     (make-variable-buffer-local 'tab-always-indent)
+                                     (setq tab-always-indent 'complete)
+                                     (yas-minor-mode t)))
