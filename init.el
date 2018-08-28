@@ -638,20 +638,6 @@ BEG and END default to the buffer boundaries."
  '(default ((t (:family "Input Mono" :foundry "nil" :slant normal :weight medium :height 100 :width narrow))))
  '(preview-reference-face ((t nil))))
 
-;; mac specific shit
-(when (equal system-type 'darwin)
-  ;; requires coreutils ('brew install coreutils', silly)
-  (if (file-exists-p "/usr/local/bin/gls")
-      (setq insert-directory-program "/usr/local/bin/gls"))
-  (setq ns-use-native-fullscreen nil)
-  (defun run-iterm ()
-    (interactive)
-    (shell-command (concat "open -a /Applications/iTerm.app .")))
-  (global-set-key (kbd "s-w") 'nil)
-  (global-set-key (kbd "s-q") 'nil)
-  )
-
-
 ;; Toggle window dedication
 (defun toggle-window-dedicated ()
   "Toggle whether the current active window is dedicated or not"
@@ -983,3 +969,7 @@ BEG and END default to the buffer boundaries."
 
 (add-to-list 'tramp-remote-process-environment
              (format "DISPLAY=%s" (getenv "DISPLAY")))
+
+(if (equal system-name "0xDEADBEEF")
+    (display-battery-mode t))
+  
