@@ -30,13 +30,18 @@
     (let ((str (read-passwd (concat (replace-regexp-in-string "%22" "\"" (replace-regexp-in-string "%0A" "\n" desc)) prompt ": "))))
       str))  
   (pinentry-start))
+(use-package rainbow-mode
+  :ensure t)
 (use-package ob-async
   :ensure t)
 (use-package anaconda-mode
   :ensure t
   :config
   (setq python-shell-interpreter "python3")
-  (setq py-shell-name "python3"))
+  (setq py-shell-name "python3")
+  (add-to-list 'python-shell-extra-pythonpaths
+               "/home/rblack/build/renpy-7.1.3-sdk/renpy/")
+  )
 (use-package lsp-ui
   :ensure t)
 (use-package company-lsp
@@ -111,8 +116,8 @@
   (require 'exwm)
   (require 'exwm-config)
   (exwm-config-default)
-  (require 'exwm-systemtray)
-  (exwm-systemtray-enable)
+  ;; (require 'exwm-systemtray)
+  ;; (exwm-systemtray-enable)
 
   ;; Allow resizing of certain windows that were being dicks
   (setq window-divider-default-right-width 1)
@@ -122,7 +127,11 @@
   :ensure t
   :config
   (require 'desktop-environment)
-  (desktop-environment-mode t))
+  (desktop-environment-mode t)
+  (setq desktop-environment-volume-get-command "amixer -D pulse get Master")
+  (setq desktop-environment-volume-set-command "amixer -D pulse set Master %s")
+  (setq desktop-environment-volume-toggle-command "amixer -D pulse set Master toggle")
+  )
 (use-package typescript-mode
   :ensure t
   :config
@@ -368,7 +377,7 @@ BEG and END default to the buffer boundaries."
   (defun my-buffer-face-mode-variable ()
     "Set font to a variable width (proportional) fonts in current buffer"
     (interactive)
-    (setq buffer-face-mode-face '(:family "TeX Gyre Bonum" :height 140 :width normal))
+    (setq buffer-face-mode-face '(:family "TeX Gyre Bonum" :height 90 :width normal))
     (buffer-face-mode))
 
   (set-default 'preview-scale-function 1.2)
@@ -608,7 +617,7 @@ BEG and END default to the buffer boundaries."
     ("~/projects/manuscripts/motorspaper/plots.org" "~/projects/manuscripts/motorspaper/molmot_rb/plots.org")))
  '(package-selected-packages
    (quote
-    (pinentry ob-async all-the-icons-dired gpastel common-lisp-snippets aggressive-indent graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest desktop-environment exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
+    (rainbow-mode git-gutter-fringe groovy-mode pinentry ob-async all-the-icons-dired gpastel common-lisp-snippets aggressive-indent graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest desktop-environment exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
  '(pdf-view-midnight-colors (quote ("#969896" . "#f8eec7")))
  '(preview-default-document-pt 12)
  '(request-backend (quote url-retrieve))
@@ -649,7 +658,7 @@ BEG and END default to the buffer boundaries."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Input Mono" :foundry "nil" :slant normal :weight medium :height 100 :width narrow))))
+ '(default ((t (:family "Input Mono" :foundry "nil" :slant normal :weight medium :height 90 :width narrow))))
  '(preview-reference-face ((t nil))))
 
 ;; Toggle window dedication
@@ -949,6 +958,7 @@ BEG and END default to the buffer boundaries."
 
 (require 'recentf)
 (add-to-list 'recentf-exclude ".*personal.*")
+(add-to-list 'recentf-exclude ".*stuff.*")
 
 ;; js2-mode stuff
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
@@ -968,7 +978,7 @@ BEG and END default to the buffer boundaries."
 (define-key tern-mode-keymap (kbd "M-.") nil)
 (define-key tern-mode-keymap (kbd "M-,") nil)
 
-(load-theme 'tsdh-dark)
+(load-theme 'sanityinc-tomorrow-night)
 
 (add-to-list 'tramp-remote-path "~/.miniconda3/bin")
 
@@ -989,3 +999,29 @@ BEG and END default to the buffer boundaries."
                                      (make-variable-buffer-local 'tab-always-indent)
                                      (setq tab-always-indent 'complete)
                                      (yas-minor-mode t)))
+
+
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/")
+(autoload 'asy-mode "asy-mode.el" "Asymptote major mode." t)
+(autoload 'lasy-mode "asy-mode.el" "hybrid Asymptote/Latex major mode." t)
+(autoload 'asy-insinuate-latex "asy-mode.el" "Asymptote insinuate LaTeX." t)
+(add-to-list 'auto-mode-alist '("\\.asy$" . asy-mode))
+
+(defun revert-buffer-no-confirm ()
+  "Revert buffer without confirmation."
+  (interactive) (revert-buffer t t))
+
+(defun exwm-logout ()
+  (interactive)
+  (recentf-save-list)
+  (save-some-buffers)
+
+  (start-process-shell-command "logout" nil "lxsession-logout"))
+
+(require 'renpy-mode)
+(add-hook 'renpy-mode-hook 'rainbow-mode)
+
+;; use eshell version of sudo for access caching
+(require 'esh-module)
+(setq eshell-prefer-lisp-functions t)
+(add-to-list 'eshell-modules-list 'eshell-tramp)
