@@ -1,5 +1,3 @@
-(server-start)
-
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
 (require 'package) ;; Load package manager
@@ -22,6 +20,8 @@
 
 (eval-when-compile
   (require 'use-package))
+(use-package password-store
+  :ensure t)
 (use-package pinentry
   :ensure t
   :config
@@ -46,7 +46,9 @@
 (use-package company-lsp
   :ensure t)
 (use-package cquery
-  :ensure t)
+  :ensure t
+  :config
+  (setq cquery-executable "/home/rblack/build/cquery/build/release/bin/cquery"))
 (use-package lsp-mode
   :ensure t
   :config
@@ -112,26 +114,36 @@
 (use-package exwm
   :ensure t
   :config
+  (if (equal system-name "Pilgrim")
+      (progn
+        (require 'exwm-randr)
+        (setq exwm-randr-workspace-output-plist '(1 "DP-2"))
+        (add-hook 'exwm-randr-screen-change-hook
+                  (lambda ()
+                    (start-process-shell-command
+                     "xrandr" nil "xrandr --output DP-0 --left-of DP-2 --auto --rotate left")))
+        (exwm-randr-enable))
+    )
   (require 'exwm)
   (require 'exwm-config)
   (exwm-config-default)
-  (setq exwm-workspace-number 1)
+  (setq exwm-workspace-number 2)
   ;; (require 'exwm-systemtray)
   ;; (exwm-systemtray-enable)
 
   ;; Allow resizing of certain windows that were being dicks
+
   (setq window-divider-default-right-width 1)
-  (window-divider-mode)
-  )
-(use-package desktop-environment
-  :ensure t
-  :config
-  (require 'desktop-environment)
-  (desktop-environment-mode t)
-  (setq desktop-environment-volume-get-command "amixer -D pulse get Master")
-  (setq desktop-environment-volume-set-command "amixer -D pulse set Master %s")
-  (setq desktop-environment-volume-toggle-command "amixer -D pulse set Master toggle")
-  )
+  (window-divider-mode))
+  (use-package desktop-environment
+    :ensure t
+    :config
+    (require 'desktop-environment)
+    (desktop-environment-mode t)
+    (setq desktop-environment-volume-get-command "amixer -D pulse get Master")
+    (setq desktop-environment-volume-set-command "amixer -D pulse set Master %s")
+    (setq desktop-environment-volume-toggle-command "amixer -D pulse set Master toggle")
+    )
 (use-package typescript-mode
   :ensure t
   :config
@@ -717,7 +729,7 @@ BEG and END default to the buffer boundaries."
                                        '(:completion (:detailedLabel t)))
                                  (make-local-variable 'company-backends)
                                  (setq company-backends '((company-lsp)))
-                                 (lsp-cquery-enable)
+                                 (lsp)
                                  ))
 
 
@@ -725,7 +737,7 @@ BEG and END default to the buffer boundaries."
 (add-hook 'c++-mode-hook '(lambda ()
                             (setq cquery-extra-init-params
                                   '(:completion (:detailedLabel t)))
-                            (lsp-cquery-enable)
+                            (lsp)
                             (setq company-transformers nil
                                   company-lsp-async t
                                   company-lsp-cache-candidates nil)
@@ -1038,12 +1050,6 @@ BEG and END default to the buffer boundaries."
   "Revert buffer without confirmation."
   (interactive) (revert-buffer t t))
 
-(defun exwm-logout ()
-  (interactive)
-  (recentf-save-list)
-  (save-some-buffers)
-
-  (start-process-shell-command "logout" nil "lxsession-logout"))
 
 (require 'renpy-mode)
 (add-hook 'renpy-mode-hook 'rainbow-mode)
@@ -1057,6 +1063,7 @@ BEG and END default to the buffer boundaries."
 (setq eshell-destroy-buffer-when-process-dies t)
 
 ;; https://www.reddit.com/r/emacs/comments/8ptscw/better_term_setting_for_shelleshell/
-;; Note that eshell doesn't inherit from comint so that comint is nonsense, but the term works
-(add-hook 'eshell-load-hook '(eshell/export "TERM=dumb-emacs-ansi"))
+;; Note that eshell doesn't inherit from comint so that comment is nonsense, but the term works
+(add-hook 'eshell-mode-hook (lambda () (eshell/export "TERM=dumb-emacs-ansi")))
 
+(winner-mode t)
