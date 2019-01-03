@@ -33,14 +33,6 @@
   :ensure t)
 (use-package ob-async
   :ensure t)
-(use-package anaconda-mode
-  :ensure t
-  :config
-  (setq python-shell-interpreter "python3")
-  (setq py-shell-name "python3")
-  (add-to-list 'python-shell-extra-pythonpaths
-               "/home/rblack/build/renpy-7.1.3-sdk/renpy/")
-  )
 (use-package lsp-ui
   :ensure t)
 (use-package company-lsp
@@ -53,6 +45,51 @@
   :ensure t
   :config
   (setq lsp-ui-sideline-show-hover 'nil))
+(use-package elpy
+  :ensure t
+  :config
+  (setq python-shell-interpreter "ipython"
+        python-shell-interpreter-args "-i --simple-prompt"
+        ;; python-shell-interpreter-args "--pylab=osx --pdb --nosep --classic --simple-prompt"
+        ;; python-shell-prompt-regexp ">>> "
+        ;; python-shell-prompt-output-regexp ""
+        ;; python-shell-completion-setup-code "from IPython.core.completerlib import module_completion"
+        ;; python-shell-completion-module-string-code "';'.join(module_completion('''%s'''))\n"
+        ;; python-shell-completion-string-code "';'.join(get_ipython().Completer.all_comnpletions('''%s'''))\n"
+        )
+  (defun my-python-before-save-hook ()
+    (when (eq major-mode 'python-mode)
+      (elpy-black-fix-code)))
+
+  (add-hook 'before-save-hook #'my-python-before-save-hook)
+
+  (defun company-yasnippet-or-completion ()
+    "Solve company yasnippet conflicts."
+    (interactive)
+    (let ((yas-fallback-behavior
+           (apply 'company-complete-common nil)))
+      (yas-expand)))
+
+  (add-hook 'company-mode-hook
+            (lambda ()
+              (substitute-key-definition
+               'company-complete-common
+               'company-yasnippet-or-completion
+               company-active-map)))
+
+  (elpy-enable)
+  )
+(use-package highlight-indentation
+  :ensure t)
+(use-package s
+  :ensure t)
+(use-package pyvenv
+  :ensure t)
+(use-package flycheck
+  :ensure t
+  :config
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  (add-hook 'elpy-mode-hook 'flycheck-mode))
 (use-package async
   :ensure t)
 (use-package js2-mode
@@ -93,7 +130,7 @@
   :hook (eshell-mode . (lambda ()
                          (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
                          (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history)
-                         (make-variable-buffer-local 'helm-turn-on-show-completion) 
+                         (make-variable-buffer-local 'helm-turn-on-show-completion)
                          (setq helm-turn-on-show-completion nil)
                          (esh-autosuggest-mode)
                          (eshell-cmpl-initialize)
@@ -135,15 +172,15 @@
 
   (setq window-divider-default-right-width 1)
   (window-divider-mode))
-  (use-package desktop-environment
-    :ensure t
-    :config
-    (require 'desktop-environment)
-    (desktop-environment-mode t)
-    (setq desktop-environment-volume-get-command "amixer -D pulse get Master")
-    (setq desktop-environment-volume-set-command "amixer -D pulse set Master %s")
-    (setq desktop-environment-volume-toggle-command "amixer -D pulse set Master toggle")
-    )
+(use-package desktop-environment
+  :ensure t
+  :config
+  (require 'desktop-environment)
+  (desktop-environment-mode t)
+  (setq desktop-environment-volume-get-command "amixer -D pulse get Master")
+  (setq desktop-environment-volume-set-command "amixer -D pulse set Master %s")
+  (setq desktop-environment-volume-toggle-command "amixer -D pulse set Master toggle")
+  )
 (use-package typescript-mode
   :ensure t
   :config
@@ -169,7 +206,7 @@
   (add-hook 'web-mode-hook
             (lambda ()
               (when (string-equal "tsx" (file-name-extension buffer-file-name))
-		(setup-tide-mode))))
+		        (setup-tide-mode))))
   ;; enable typescript-tslint checker
   (flycheck-add-mode 'typescript-tslint 'web-mode))
 (use-package tide
@@ -451,9 +488,9 @@ BEG and END default to the buffer boundaries."
 
   (global-set-key (kbd "C-x b") 'helm-mini)
   (setq helm-buffers-fuzzy-matching t
-      helm-recentf-fuzzy-match    t)
+        helm-recentf-fuzzy-match    t)
   (setq helm-semantic-fuzzy-match t
-      helm-imenu-fuzzy-match    t)
+        helm-imenu-fuzzy-match    t)
   (global-set-key (kbd "C-c h o") 'helm-occur)
   (helm-mode 1)
   )
@@ -509,12 +546,6 @@ BEG and END default to the buffer boundaries."
   :ensure t)
 (use-package json-mode
   :ensure t)
-(use-package python-mode
-  :ensure t
-  :defer t)
-(use-package ipython
-  :ensure t
-  :after python-mode)
 (use-package flycheck
   :ensure t)
 (use-package exec-path-from-shell
@@ -523,10 +554,9 @@ BEG and END default to the buffer boundaries."
   :ensure t
   :config
   (add-hook 'elm-mode-hook '(lambda ()
-                            (smartparens-mode)
-                            (company-mode)
-                            (make-local-variable 'company-backends))))
-
+                              (smartparens-mode)
+                              (company-mode)
+                              (make-local-variable 'company-backends))))
 (use-package company
   :ensure t
   :config
@@ -538,16 +568,12 @@ BEG and END default to the buffer boundaries."
   (define-key company-active-map (kbd "M-TAB") 'company-complete-common)
 
   (setq company-idle-delay            0.2
-      company-minimum-prefix-length   2
-      company-show-numbers            t
-      company-tooltip-limit           20
-      company-dabbrev-downcase        nil
-      )
+        company-minimum-prefix-length   2
+        company-show-numbers            t
+        company-tooltip-limit           20
+        company-dabbrev-downcase        nil
+        )
   )
-
-
-
-
 (use-package cmake-mode
   :ensure t)
 (use-package buffer-move
@@ -581,7 +607,7 @@ BEG and END default to the buffer boundaries."
 (global-set-key (kbd "s-p") nil) ; no printing
 (global-set-key (kbd "C-z") nil) ; no background
 (global-set-key (kbd "s-w") nil) ; no closing
-(global-set-key (kbd "M-z") 'zap-up-to-char) 
+(global-set-key (kbd "M-z") 'zap-up-to-char)
 
 ;; Let me kill buffers and downcase shit
 (put 'erase-buffer 'disabled nil)
@@ -610,37 +636,18 @@ BEG and END default to the buffer boundaries."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default bold shadow italic underline bold bold-italic bold])
- '(ansi-color-names-vector
-   ["#000000" "#8b0000" "#00ff00" "#ffa500" "#7b68ee" "#dc8cc3" "#93e0e3" "#dcdccc"])
- '(beacon-color "#d54e53")
  '(blink-cursor-mode t)
  '(column-number-mode t)
  '(compilation-message-face (quote default))
  '(custom-safe-themes
    (quote
-    ("5eb74c29743f6a6627bbd3f6f25f00f7962e75216d618a4dfaddae378310d9a6" "d1cc05d755d5a21a31bced25bed40f85d8677e69c73ca365628ce8024827c9e3" "9a155066ec746201156bb39f7518c1828a73d67742e11271e4f24b7b178c4710" "ba7917b02812fee8da4827fdf7867d3f6f282694f679b5d73f9965f45590843a" "c72a772c104710300103307264c00a04210c00f6cc419a79b8af7890478f380e" "d5f17ae86464ef63c46ed4cb322703d91e8ed5e718bf5a7beb69dd63352b26b2" "a0dc0c1805398db495ecda1994c744ad1a91a9455f2a17b59b716f72d3585dde" "ad9747dc51ca23d1c1382fa9bd5d76e958a5bfe179784989a6a666fe801aadf2" "807a7f4c2d0d331fc1798e6d38b890ce3582096b8d622ba3b491b2aa4345e962" "bf64dd3657eef02b3b5f7439d452c7b18f4b5c1e717e6037c8f2b61b9b3dbcf8" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "40f6a7af0dfad67c0d4df2a1dd86175436d79fc69ea61614d668a635c2cd94ab" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "b9183de9666c3a16a7ffa7faaa8e9941b8d0ab50f9aaba1ca49f2f3aec7e3be9" "efb148b9a120f417464713fe6cad47eb708dc45c7f2dbfeea4a7ec329214e63e" "e80932ca56b0f109f8545576531d3fc79487ca35a9a9693b62bf30d6d08c9aaf" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "60f04e478dedc16397353fb9f33f0d895ea3dab4f581307fbf0aa2f07e658a40" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "9370aeac615012366188359cb05011aea721c73e1cb194798bc18576025cabeb" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" default)))
+    ("d1cc05d755d5a21a31bced25bed40f85d8677e69c73ca365628ce8024827c9e3" "9a155066ec746201156bb39f7518c1828a73d67742e11271e4f24b7b178c4710" "ba7917b02812fee8da4827fdf7867d3f6f282694f679b5d73f9965f45590843a" "c72a772c104710300103307264c00a04210c00f6cc419a79b8af7890478f380e" "d5f17ae86464ef63c46ed4cb322703d91e8ed5e718bf5a7beb69dd63352b26b2" "a0dc0c1805398db495ecda1994c744ad1a91a9455f2a17b59b716f72d3585dde" "ad9747dc51ca23d1c1382fa9bd5d76e958a5bfe179784989a6a666fe801aadf2" "807a7f4c2d0d331fc1798e6d38b890ce3582096b8d622ba3b491b2aa4345e962" "bf64dd3657eef02b3b5f7439d452c7b18f4b5c1e717e6037c8f2b61b9b3dbcf8" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "40f6a7af0dfad67c0d4df2a1dd86175436d79fc69ea61614d668a635c2cd94ab" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "b9183de9666c3a16a7ffa7faaa8e9941b8d0ab50f9aaba1ca49f2f3aec7e3be9" "efb148b9a120f417464713fe6cad47eb708dc45c7f2dbfeea4a7ec329214e63e" "e80932ca56b0f109f8545576531d3fc79487ca35a9a9693b62bf30d6d08c9aaf" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "60f04e478dedc16397353fb9f33f0d895ea3dab4f581307fbf0aa2f07e658a40" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "9370aeac615012366188359cb05011aea721c73e1cb194798bc18576025cabeb" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" default)))
  '(eshell-visual-commands
    (quote
     ("alsamixer" "htop" "vi" "screen" "top" "less" "more" "lynx" "ncftp" "pine" "tin" "trn" "elm")))
  '(ess-language "R" t)
  '(fci-rule-color "#969896")
- '(flycheck-color-mode-line-face-to-color (quote mode-line-buffer-id))
- '(frame-background-mode (quote dark))
- '(highlight-changes-colors (quote ("#FD5FF0" "#AE81FF")))
- '(highlight-tail-colors
-   (quote
-    (("#3C3D37" . 0)
-     ("#679A01" . 20)
-     ("#4BBEAE" . 30)
-     ("#1DB4D0" . 50)
-     ("#9A8F21" . 60)
-     ("#A75B00" . 70)
-     ("#F309DF" . 85)
-     ("#3C3D37" . 100))))
  '(iwconfig-program "/sbin/iw")
- '(magit-diff-use-overlays nil t)
  '(notmuch-fcc-dirs (quote (("robert.blackwell@fau.de" . "fau/Sent"))))
  '(notmuch-poll-script "notmuch-poll.sh")
  '(nrepl-message-colors
@@ -651,10 +658,8 @@ BEG and END default to the buffer boundaries."
     ("~/projects/manuscripts/motorspaper/plots.org" "~/projects/manuscripts/motorspaper/molmot_rb/plots.org")))
  '(package-selected-packages
    (quote
-    (cyberpunk-theme rainbow-mode password-store git-gutter-fringe groovy-mode pinentry ob-async all-the-icons-dired gpastel common-lisp-snippets aggressive-indent graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest desktop-environment exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk anaconda-mode markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
+    (cyberpunk-theme password-store rainbow-mode git-gutter-fringe groovy-mode pinentry ob-async all-the-icons-dired gpastel common-lisp-snippets aggressive-indent graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest desktop-environment exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
  '(pdf-view-midnight-colors (quote ("#969896" . "#f8eec7")))
- '(pos-tip-background-color "#FFFACE")
- '(pos-tip-foreground-color "#272822")
  '(preview-default-document-pt 12)
  '(request-backend (quote url-retrieve))
  '(send-mail-function (quote smtpmail-send-it))
@@ -687,10 +692,7 @@ BEG and END default to the buffer boundaries."
      (320 . "#969896")
      (340 . "#a71d5d")
      (360 . "#969896"))))
- '(vc-annotate-very-old-color "#969896")
- '(weechat-color-list
-   (quote
-    (unspecified "#272822" "#3C3D37" "#F70057" "#F92672" "#86C30D" "#A6E22E" "#BEB244" "#E6DB74" "#40CAE4" "#66D9EF" "#FB35EA" "#FD5FF0" "#74DBCD" "#A1EFE4" "#F8F8F2" "#F8F8F0"))))
+ '(vc-annotate-very-old-color "#969896"))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -758,14 +760,6 @@ BEG and END default to the buffer boundaries."
              (setq tab-always-indent 'complete)
              (yas-minor-mode t)
              ))
-
-(add-hook 'python-mode-hook '(lambda ()
-                               ;; (elpy-mode)
-                               (anaconda-mode)
-                               (yas-minor-mode)
-                               (smartparens-mode)
-                               (company-mode)
-                               ))
 
 ;; Standard fortpy.el setting
 (require 'fortran-tags)
@@ -931,7 +925,7 @@ BEG and END default to the buffer boundaries."
 
 
 (auto-insert-mode)
- ;; *NOTE* Trailing slash important
+;; *NOTE* Trailing slash important
 (setq auto-insert-directory (concat (getenv "HOME") "/projects/misc/templates/"))
 (setq auto-insert-query nil)
 (define-auto-insert "\\.tex$" "latex-template.tex")
@@ -1007,7 +1001,7 @@ BEG and END default to the buffer boundaries."
 (define-key js2-mode-map (kbd "C-k") #'js2r-kill)
 (define-key js-mode-map (kbd "M-.") nil)
 (add-hook 'js2-mode-hook (lambda ()
-  (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
+                           (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
 (define-key js2-mode-map (kbd "C-k") #'js2r-kill)
 (add-to-list 'company-backends 'company-tern)
 (add-hook 'js2-mode-hook (lambda ()
@@ -1030,7 +1024,7 @@ BEG and END default to the buffer boundaries."
 
 (if (equal system-name "0xDEADBEEF")
     (display-battery-mode t))
-  
+
 (add-to-list 'emacs-lisp-mode-hook (lambda ()
                                      (paredit-mode t)
                                      (aggressive-indent-mode t)
@@ -1067,3 +1061,5 @@ BEG and END default to the buffer boundaries."
 (add-hook 'eshell-mode-hook (lambda () (eshell/export "TERM=dumb-emacs-ansi")))
 
 (winner-mode t)
+
+
