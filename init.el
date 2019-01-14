@@ -647,16 +647,16 @@ BEG and END default to the buffer boundaries."
    (quote
     ("alsamixer" "htop" "vi" "screen" "top" "less" "more" "lynx" "ncftp" "pine" "tin" "trn" "elm")))
  '(ess-language "R" t)
- '(fci-rule-color "#969896")
+ '(fci-rule-color "#383838")
  '(iwconfig-program "/sbin/iw")
  '(notmuch-fcc-dirs (quote (("robert.blackwell@fau.de" . "fau/Sent"))))
  '(notmuch-poll-script "notmuch-poll.sh")
  '(nrepl-message-colors
    (quote
     ("#183691" "#969896" "#a71d5d" "#969896" "#0086b3" "#795da3" "#a71d5d" "#969896")))
- '(org-agenda-files
-   (quote
-    ("~/projects/manuscripts/motorspaper/plots.org" "~/projects/manuscripts/motorspaper/molmot_rb/plots.org")))
+ '(org-agenda-files (quote ("~/projects/agenda/")))
+ '(org-agenda-log-mode-items (quote (closed clock state)))
+ '(org-log-done (quote time))
  '(package-selected-packages
    (quote
     (cyberpunk-theme password-store rainbow-mode git-gutter-fringe groovy-mode pinentry ob-async all-the-icons-dired gpastel common-lisp-snippets aggressive-indent graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest desktop-environment exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
@@ -1089,3 +1089,19 @@ BEG and END default to the buffer boundaries."
           (if this-win-2nd (other-window 1))))))
 
 (global-set-key (kbd "C-x |") 'toggle-window-split)
+
+
+;; Productivity!
+(setq org-agenda-custom-commands
+      '(("h" "Daily habits"
+         ((agenda ""))
+         ((org-agenda-show-log t)
+          (org-agenda-ndays 7)
+          (org-agenda-log-mode-items '(state))
+          (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp ":DAILY:"))
+          ))
+        ;; other commands here
+        ))
+
+(global-set-key "\C-ca" 'org-agenda)
+
