@@ -268,9 +268,9 @@
   :config
   (global-set-key [f10] 'org-capture)
   (setq org-capture-templates
-        '(("t" "Todo" entry (file+headline "~/org/todo.org" "Tasks")
+        '(("t" "Todo" entry (file+headline "~/projects/agenda/agenda.org" "Tasks")
            "* TODO %?\n  %i\n  %a")
-          ("j" "Journal" entry (file+datetree "~/org/journal.org")
+          ("j" "Journal" entry (file+datetree "~/projects/agenda/journal.org")
            "* %?\nEntered on %U\n  %i\n  %a")))
 
   ;; inline most image types in org-mode via the 'convert' utility
@@ -654,7 +654,9 @@ BEG and END default to the buffer boundaries."
  '(nrepl-message-colors
    (quote
     ("#183691" "#969896" "#a71d5d" "#969896" "#0086b3" "#795da3" "#a71d5d" "#969896")))
- '(org-agenda-files (quote ("~/projects/agenda/")))
+ '(org-agenda-files
+   (quote
+    ("~/projects/agenda/agenda.org" "~/projects/agenda/recurring.org" "~/projects/agenda/journal.org")))
  '(org-agenda-log-mode-items (quote (closed clock state)))
  '(org-log-done (quote time))
  '(package-selected-packages
@@ -1104,4 +1106,3 @@ BEG and END default to the buffer boundaries."
         ))
 
 (global-set-key "\C-ca" 'org-agenda)
-
