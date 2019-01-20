@@ -1106,3 +1106,6 @@ BEG and END default to the buffer boundaries."
         ))
 
 (global-set-key "\C-ca" 'org-agenda)
+
+;; clickable links in ansi-term!
+(add-hook 'term-mode-hook 'goto-address-mode)
