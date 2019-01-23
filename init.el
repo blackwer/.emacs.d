@@ -654,6 +654,20 @@ BEG and END default to the buffer boundaries."
  '(nrepl-message-colors
    (quote
     ("#183691" "#969896" "#a71d5d" "#969896" "#0086b3" "#795da3" "#a71d5d" "#969896")))
+ '(org-agenda-custom-commands
+   (quote
+    (("h" "Daily habits"
+      ((agenda "" nil))
+      ((org-agenda-show-log t)
+       (org-agenda-ndays 7)
+       (org-agenda-log-mode-items
+        (quote
+         (state)))
+       (org-agenda-skip-function
+        (quote
+         (org-agenda-skip-entry-if
+          (quote notregexp)
+          ":DAILY:"))))))))
  '(org-agenda-files
    (quote
     ("~/projects/agenda/agenda.org" "~/projects/agenda/recurring.org" "~/projects/agenda/journal.org")))
@@ -1093,19 +1107,17 @@ BEG and END default to the buffer boundaries."
 (global-set-key (kbd "C-x |") 'toggle-window-split)
 
 
-;; Productivity!
-(setq org-agenda-custom-commands
-      '(("h" "Daily habits"
-         ((agenda ""))
-         ((org-agenda-show-log t)
-          (org-agenda-ndays 7)
-          (org-agenda-log-mode-items '(state))
-          (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp ":DAILY:"))
-          ))
-        ;; other commands here
-        ))
-
 (global-set-key "\C-ca" 'org-agenda)
 
 ;; clickable links in ansi-term!
 (add-hook 'term-mode-hook 'goto-address-mode)
+
+(defun my-agenda-commit ()
+  (interactive)
+  (progn
+    (org-save-all-org-buffers)
+    (message "Committing org files in ~/projects/agenda/")
+    (shell-command "cd ~/projects/agenda/ && git commit -am 'autocommit'")
+    (shell-command "cd ~/projects/agenda/ && git push & /usr/bin/env true"))
+  )
+
