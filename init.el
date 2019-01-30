@@ -1121,3 +1121,11 @@ BEG and END default to the buffer boundaries."
     (shell-command "cd ~/projects/agenda/ && git push & /usr/bin/env true"))
   )
 
+(defun my-agenda-pull ()
+  (interactive)
+  (progn
+    ;; (org-save-all-org-buffers)
+    (message "Updating agenda at ~/projects/agenda/")
+    (shell-command "cd ~/projects/agenda/ && git pull")
+    )
+  )
