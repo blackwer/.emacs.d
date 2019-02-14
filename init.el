@@ -449,7 +449,8 @@ BEG and END default to the buffer boundaries."
                               (tex-pdf-mode t)
                               (set-fill-column 99999)
                               (my-buffer-face-mode-variable))))
-
+(use-package color-theme-modern
+  :ensure t)
 (use-package leuven-theme
   :ensure t
   :config
