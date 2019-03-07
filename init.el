@@ -493,6 +493,11 @@ BEG and END default to the buffer boundaries."
   (setq helm-semantic-fuzzy-match t
         helm-imenu-fuzzy-match    t)
   (global-set-key (kbd "C-c h o") 'helm-occur)
+
+  (setq helm-show-completion-display-function #'helm-show-completion-default-display-function)
+
+  ;; Use fuzzy finding instead of clumsy reverse search
+  (add-hook 'eshell-mode-hook (lambda () (define-key eshell-mode-map (kbd "M-r") 'helm-eshell-history)))
   (helm-mode 1)
   )
 (use-package helm-swoop
