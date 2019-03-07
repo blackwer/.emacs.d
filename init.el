@@ -127,19 +127,12 @@
 (use-package all-the-icons-dired
   ;; M-x all-the-icons-install-fonts
   :commands (all-the-icons-dired-mode))
-(use-package esh-autosuggest
-  :hook (eshell-mode . (lambda ()
-                         (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)
-                         (define-key eshell-mode-map (kbd "M-p") 'helm-eshell-history)
-                         (make-variable-buffer-local 'helm-turn-on-show-completion)
-                         (setq helm-turn-on-show-completion nil)
-                         (esh-autosuggest-mode)
-                         (eshell-cmpl-initialize)
-                         ))
-  ;; If you have use-package-hook-name-suffix set to nil, uncomment and use the
-  ;; line below instead:
-  ;; :hook (eshell-mode-hook . esh-autosuggest-mode)
-  :ensure t)
+(use-package fish-completion
+  :ensure t
+  :config
+  (when (and (executable-find "fish")
+             (require 'fish-completion nil t))
+    (global-fish-completion-mode)))
 (use-package pdf-tools
   :ensure t
   :init
@@ -700,7 +693,7 @@ BEG and END default to the buffer boundaries."
  '(org-log-done (quote time))
  '(package-selected-packages
    (quote
-    (color-theme-modern cyberpunk-theme password-store rainbow-mode git-gutter-fringe groovy-mode pinentry ob-async all-the-icons-dired gpastel common-lisp-snippets aggressive-indent graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest desktop-environment exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
+    (fish-completion color-theme-modern cyberpunk-theme password-store rainbow-mode git-gutter-fringe groovy-mode pinentry ob-async all-the-icons-dired gpastel common-lisp-snippets aggressive-indent graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet desktop-environment exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
  '(pdf-view-midnight-colors (quote ("#969896" . "#f8eec7")))
  '(preview-default-document-pt 12)
  '(request-backend (quote url-retrieve))
