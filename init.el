@@ -1099,7 +1099,7 @@ BEG and END default to the buffer boundaries."
 
 ;; use eshell version of sudo for access caching
 (require 'esh-module)
-(setq eshell-prefer-lisp-functions t)
+(setq eshell-prefer-lisp-functions 'nil)
 (add-to-list 'eshell-modules-list 'eshell-tramp)
 (setq password-cache t) ; enable password caching
 (setq password-cache-expiry 120) ; for one hour (time in secs)
