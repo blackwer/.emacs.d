@@ -1063,8 +1063,6 @@ BEG and END default to the buffer boundaries."
 (define-key tern-mode-keymap (kbd "M-.") nil)
 (define-key tern-mode-keymap (kbd "M-,") nil)
 
-(load-theme 'cyberpunk)
-
 (add-to-list 'tramp-remote-path "~/.miniconda3/bin")
 
 (let ((process-environment tramp-remote-process-environment))
