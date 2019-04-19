@@ -1,3 +1,6 @@
+(setq gc-cons-threshold 402653184
+      gc-cons-percentage 0.6)
+
 (server-start)
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
@@ -1153,3 +1156,7 @@ BEG and END default to the buffer boundaries."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+
+(setq gc-cons-threshold 16777216
+      gc-cons-percentage 0.1)
