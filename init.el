@@ -24,6 +24,14 @@
 
 (eval-when-compile
   (require 'use-package))
+(use-package multi-term
+  :ensure t
+  :config
+  (add-to-list 'term-bind-key-alist (cons "M-1" 'term-send-raw-meta))
+  (add-to-list 'term-bind-key-alist (cons "M-2" 'term-send-raw-meta))
+  (add-to-list 'term-bind-key-alist (cons "M-3" 'term-send-raw-meta))
+  (add-to-list 'term-bind-key-alist (cons "M-DEL" 'term-send-raw-meta))
+  )
 (use-package paradox
   :ensure t)
 (use-package password-store
@@ -158,7 +166,7 @@
   (if (equal system-name "Pilgrim")
       (progn
         (require 'exwm-randr)
-        (setq exwm-randr-workspace-output-plist '(1 "DP-2"))
+        (setq exwm-randr-workspace-output-plist '(0 "DP-2" 1 "DP-0"))
         ;; (add-hook 'exwm-randr-screen-change-hook
         ;;           (lambda ()
         ;;             (start-process-shell-command
@@ -232,24 +240,21 @@
                  '("revtex4-1"
                    "\\documentclass{revtex4-1}"
                    ("\\section{%s}" . "\\section*{%s}"))))
-  (add-hook 'iESS-mode-hook
-            (local-set-key (kbd "[?\\t]") 'complete-at-point)
-            )
   (setq org-confirm-babel-evaluate nil
         org-src-fontify-natively t
         org-src-tab-acts-natively t
         org-image-actual-width 600)
   (org-babel-do-load-languages
-   'org-babel-load-languages (quote ((emacs-lisp . t)
-                                     (sqlite . t)
-                                     (clojure . t)
-                                     (clojurescript . t)
-                                     (sagemath . t)
-                                     (calc . t)
-                                     (lisp . t)
-                                     (shell . t)
-                                     (jupyter . t)
-                                     (python . t))))
+   'org-babel-load-languages '((emacs-lisp . t)
+                               (sqlite . t)
+                               (clojure . t)
+                               (clojurescript . t)
+                               (calc . t)
+                               (lisp . t)
+                               (shell . t)
+                               (python . t)
+                               (jupyter . t)
+                               ))
   (setq inferior-lisp-program (executable-find "sbcl"))
   (setq org-babel-python-command "python3")
   (require 'ob-clojure)
@@ -326,47 +331,6 @@ BEG and END default to the buffer boundaries."
                                    (list 'org-display-inline-remove-overlay))
                       (push ov org-inline-image-overlays)))))))))))
   )
-(use-package ob-sagemath
-  :ensure t
-  :after org
-  :init
-  ;; Ob-sagemath supports only evaluating with a session.
-  (setq org-babel-default-header-args:sage '((:session . t)
-                                             (:results . "output")))
-
-  ;; C-c c for asynchronous evaluating (only for SageMath code blocks).
-  (with-eval-after-load "org"
-    (define-key org-mode-map (kbd "C-c c") 'ob-sagemath-execute-async))
-
-  ;; Do not confirm before evaluation
-  (setq org-confirm-babel-evaluate nil)
-
-  ;; Do not evaluate code blocks when exporting.
-  (setq org-export-babel-evaluate nil)
-
-  ;; Show images when opening a file.
-  (setq org-startup-with-inline-images t)
-
-  ;; Show images after evaluating code blocks.
-  (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
-
-  (setenv "SAGE_ROOT" "/home/rblack/.miniconda3/envs/sage")
-  (setenv "SAGE_LOCAL" "/home/rblack/.miniconda3/envs/sage")
-  )
-;; (use-package org-ref
-;;   :ensure t
-;;   :after org
-;;   :init
-;;   (setq org-ref-completion-library 'org-ref-ivy-cite)
-;;   (setq org-ref-default-bibliography '("~/projects/misc/bibliography/globalrefs.bib")
-;;         org-ref-pdf-directory "~/projects/misc/bibliography/bibtex-pdfs/"
-;;         org-ref-bibliography-notes "~/projects/misc/bibliography/notes.org")
-;;   (setq org-latex-pdf-process
-;;         '("pdflatex -interaction nonstopmode -output-directory %o %f"
-;; 	      "bibtex %b"
-;; 	      "pdflatex -interaction nonstopmode -output-directory %o %f"
-;; 	      "pdflatex -interaction nonstopmode -output-directory %o %f"))
-;;   )
 (use-package ox-pandoc
   :ensure t
   :after org
@@ -640,11 +604,14 @@ BEG and END default to the buffer boundaries."
  '(custom-safe-themes
    (quote
     ("170bb47b35baa3d2439f0fd26b49f4278e9a8decf611aa33a0dad1397620ddc3" "bd7b7c5df1174796deefce5debc2d976b264585d51852c962362be83932873d9" "ed92c27d2d086496b232617213a4e4a28110bdc0730a9457edf74f81b782c5cf" "f19d195fa336e9904303eea20aad35036b79cfde72fa6e76b7462706acd52920" "3bc187cd480ad79f151b593f7cb7d4ad869b19741247589238c353f637e7fb21" "938f120eeda938eef2c36b4cc9609d1ad91b3a3666cd63a4be5b70b739004942" "36bab4e2aa8165f538e6d223ee1d2a0ef918ccba09e18c62cf8594467685a3b6" "0f302165235625ca5a827ac2f963c102a635f27879637d9021c04d845a32c568" "2642a1b7f53b9bb34c7f1e032d2098c852811ec2881eec2dc8cc07be004e45a0" "2d5c40e709543f156d3dee750cd9ac580a20a371f1b1e1e3ecbef2b895cf0cd2" "67b11ee5d10f1b5f7638035d1a38f77bca5797b5f5b21d16a20b5f0452cbeb46" "09feeb867d1ca5c1a33050d857ad6a5d62ad888f4b9136ec42002d6cdf310235" "9dc64d345811d74b5cd0dac92e5717e1016573417b23811b2c37bb985da41da2" "a5a2954608aac5c4dcf9659c07132eaf0da25a8f298498a7eacf97e2adb71765" "4c8372c68b3eab14516b6ab8233de2f9e0ecac01aaa859e547f902d27310c0c3" "2ea9afebc23cca3cd0cd39943b8297ce059e31cb62302568b8fa5c25a22db5bc" "2047464bf6781156ebdac9e38a17b97bd2594b39cfeaab561afffcbbe19314e2" "01e0367d8c3249928a2e0ebc9807b2f791f81a0d2a7c8656e1fbf4b1dbaa404c" "9bd5ee2b24759fbc97f86c2783d1bf8f883eb1c0dd2cf7bda2b539cd28abf6a9" "a621dd9749f2651e357a61f8d8d2d16fb6cacde3b3784d02151952e1b9781f05" "44f5578eccb2cde3b196dfa86a298b75fe39ceff975110c091fa8c874c338b50" "995d0754b79c4940d82bd430d7ebecca701a08631ec46ddcd2c9557059758d33" "3ed2e1653742e5059e3d77af013ee90c1c1b776d83ec33e1a9ead556c19c694b" "aad7fd3672aad03901bf91e338cd530b87efc2162697a6bef79d7f8281fd97e3" "aae40caa1c4f1662f7cae1ebfbcbb5aa8cf53558c81f5bc15baefaa2d8da0241" "68b847fac07094724e552eeaf96fa4c7e20824ed5f3f225cad871b8609d50ace" "4e7e04c4b161dd04dc671fb5288e3cc772d9086345cb03b7f5ed8538905e8e27" "d422c7673d74d1e093397288d2e02c799340c5dabf70e87558b8e8faa3f83a6c" "abd7719fd9255fcd64f631664390e2eb89768a290ee082a9f0520c5f12a660a8" "5c83b15581cb7274085ba9e486933062652091b389f4080e94e4e9661eaab1aa" "880f541eabc8c272d88e6a1d8917fe743552f17cedd8f138fe85987ee036ad08" "c51e302edfe6d2effca9f7c9a8a8cfc432727efcf86246002a3b45e290306c1f" "1a094b79734450a146b0c43afb6c669045d7a8a5c28bc0210aba28d36f85d86f" "392f19e7788de27faf128a6f56325123c47205f477da227baf6a6a918f73b5dc" "fe349b21bb978bb1f1f2db05bc87b2c6d02f1a7fe3f27584cd7b6fbf8e53391a" "1127f29b2e4e4324fe170038cbd5d0d713124588a93941b38e6295a58a48b24f" "b8c5adfc0230bd8e8d73450c2cd4044ad7ba1d24458e37b6dec65607fc392980" "701b4b4e7989329a0704b92fc17e6600cc18f9df4f2466617ec91c932b5477eb" "59e82a683db7129c0142b4b5a35dbbeaf8e01a4b81588f8c163bd255b76f4d21" "d1cc05d755d5a21a31bced25bed40f85d8677e69c73ca365628ce8024827c9e3" "9a155066ec746201156bb39f7518c1828a73d67742e11271e4f24b7b178c4710" "ba7917b02812fee8da4827fdf7867d3f6f282694f679b5d73f9965f45590843a" "c72a772c104710300103307264c00a04210c00f6cc419a79b8af7890478f380e" "d5f17ae86464ef63c46ed4cb322703d91e8ed5e718bf5a7beb69dd63352b26b2" "a0dc0c1805398db495ecda1994c744ad1a91a9455f2a17b59b716f72d3585dde" "ad9747dc51ca23d1c1382fa9bd5d76e958a5bfe179784989a6a666fe801aadf2" "807a7f4c2d0d331fc1798e6d38b890ce3582096b8d622ba3b491b2aa4345e962" "bf64dd3657eef02b3b5f7439d452c7b18f4b5c1e717e6037c8f2b61b9b3dbcf8" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "40f6a7af0dfad67c0d4df2a1dd86175436d79fc69ea61614d668a635c2cd94ab" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "b9183de9666c3a16a7ffa7faaa8e9941b8d0ab50f9aaba1ca49f2f3aec7e3be9" "efb148b9a120f417464713fe6cad47eb708dc45c7f2dbfeea4a7ec329214e63e" "e80932ca56b0f109f8545576531d3fc79487ca35a9a9693b62bf30d6d08c9aaf" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "60f04e478dedc16397353fb9f33f0d895ea3dab4f581307fbf0aa2f07e658a40" "82d2cac368ccdec2fcc7573f24c3f79654b78bf133096f9b40c20d97ec1d8016" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" "9370aeac615012366188359cb05011aea721c73e1cb194798bc18576025cabeb" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" default)))
+ '(eshell-buffer-maximum-lines 8092)
  '(eshell-history-size 4096)
+ '(eshell-output-filter-functions
+   (quote
+    (eshell-postoutput-scroll-to-bottom eshell-handle-control-codes eshell-handle-ansi-color eshell-watch-for-password-prompt)))
  '(eshell-visual-commands
    (quote
     ("ipython" "gnuplot" "alsamixer" "htop" "vi" "screen" "top" "less" "more" "lynx" "ncftp" "pine" "tin" "trn" "elm")))
- '(ess-language "R" t)
  '(fci-rule-color "#383838")
  '(gdb-many-windows t)
  '(hl-todo-keyword-faces
@@ -692,7 +659,7 @@ BEG and END default to the buffer boundaries."
  '(org-log-done (quote time))
  '(package-selected-packages
    (quote
-    (jupyter paradox fish-completion color-theme-modern cyberpunk-theme password-store rainbow-mode git-gutter-fringe groovy-mode pinentry ob-async all-the-icons-dired gpastel common-lisp-snippets aggressive-indent graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
+    (multi-term jupyter paradox fish-completion color-theme-modern cyberpunk-theme password-store rainbow-mode git-gutter-fringe groovy-mode pinentry ob-async all-the-icons-dired gpastel common-lisp-snippets aggressive-indent graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
  '(paradox-github-token t)
  '(pdf-view-midnight-colors (quote ("#969896" . "#f8eec7")))
  '(preview-default-document-pt 12)
