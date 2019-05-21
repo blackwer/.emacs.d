@@ -384,8 +384,7 @@ BEG and END default to the buffer boundaries."
   ;; to use pdfview with auctex
   (setq TeX-view-program-selection '((output-pdf "PDF Tools"))
         TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view))
-        ;; TeX-source-correlate-start-server t
-        ) ;; not sure if last line is neccessary
+        )
 
   ;; to have the buffer refresh after compilation
   (add-hook 'TeX-after-compilation-finished-functions
@@ -538,8 +537,6 @@ BEG and END default to the buffer boundaries."
   :ensure t)
 (use-package buffer-move
   :ensure t)
-;; (use-package anaphora
-;;   :ensure t)
 (use-package wttrin
   :ensure t
   :config
@@ -614,6 +611,9 @@ BEG and END default to the buffer boundaries."
     ("ipython" "gnuplot" "alsamixer" "htop" "vi" "screen" "top" "less" "more" "lynx" "ncftp" "pine" "tin" "trn" "elm")))
  '(fci-rule-color "#383838")
  '(gdb-many-windows t)
+ '(helm-ls-git-default-sources
+   (quote
+    (helm-source-ls-git-buffers helm-source-ls-git helm-source-ls-git-status)))
  '(hl-todo-keyword-faces
    (quote
     (("TODO" . "#dc752f")
