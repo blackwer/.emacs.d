@@ -53,17 +53,24 @@
 (use-package jupyter
   :ensure t)
 (use-package lsp-ui
-  :ensure t)
+  :ensure t
+  :commands lsp-ui-mode)
 (use-package company-lsp
-  :ensure t)
-(use-package cquery
+  :ensure t
+  :commands company-lsp)
+(use-package ccls
   :ensure t
   :config
-  (setq cquery-executable "/home/rblack/build/cquery/build/release/bin/cquery"))
+  (setq ccls-executable "~/.emacs.d/ccls.sh")
+  :hook ((c-mode c++-mode objc-mode) .
+         (lambda () (require 'ccls) (lsp)))
+  )
 (use-package lsp-mode
   :ensure t
   :config
-  (setq lsp-ui-sideline-show-hover 'nil))
+  (setq lsp-ui-sideline-show-hover 'nil)
+  (setq lsp-prefer-flymake 'nil)
+  )
 (use-package elpy
   :ensure t
   :config
@@ -161,7 +168,7 @@
   :ensure t
   )
 (use-package exwm
-  :ensure t
+  :disabled
   :config
   (if (equal system-name "Pilgrim")
       (progn
@@ -400,7 +407,7 @@ BEG and END default to the buffer boundaries."
                               (my-buffer-face-mode-variable))))
 
 (defadvice load-theme (before theme-dont-propagate activate)
-  (mapcar #'disable-theme custom-enabled-themes))
+  (mapc #'disable-theme custom-enabled-themes))
 (use-package color-theme-modern
   :ensure t)
 (use-package leuven-theme
@@ -542,10 +549,17 @@ BEG and END default to the buffer boundaries."
   :config
   (setq wttrin-default-cities '("Erlangen"))
   (setq wttrin-default-accept-language '("Accept-Language" . "en-US,en;")))
+(use-package ein
+  :ensure t)
+(use-package edit-server
+  :ensure t
+  :config
+  (edit-server-start))
 
 ;; Various settings
 (tool-bar-mode -1)
-(menu-bar-mode -1)
+(if (not (eq system-type 'darwin))
+    (menu-bar-mode -1))
 (scroll-bar-mode -1)
 (tooltip-mode -1)
 (blink-cursor-mode)
@@ -611,6 +625,7 @@ BEG and END default to the buffer boundaries."
     ("ipython" "gnuplot" "alsamixer" "htop" "vi" "screen" "top" "less" "more" "lynx" "ncftp" "pine" "tin" "trn" "elm")))
  '(fci-rule-color "#383838")
  '(gdb-many-windows t)
+ '(gud-gdb-command-name "gdb --annotate=1")
  '(helm-ls-git-default-sources
    (quote
     (helm-source-ls-git-buffers helm-source-ls-git helm-source-ls-git-status)))
@@ -633,6 +648,7 @@ BEG and END default to the buffer boundaries."
      ("XXXX" . "#dc752f")
      ("???" . "#dc752f"))))
  '(iwconfig-program "/sbin/iw")
+ '(large-file-warning-threshold nil)
  '(notmuch-fcc-dirs (quote (("robert.blackwell@fau.de" . "fau/Sent"))))
  '(notmuch-poll-script "notmuch-poll.sh")
  '(nrepl-message-colors
@@ -659,7 +675,7 @@ BEG and END default to the buffer boundaries."
  '(org-log-done (quote time))
  '(package-selected-packages
    (quote
-    (multi-term jupyter paradox fish-completion color-theme-modern cyberpunk-theme password-store rainbow-mode git-gutter-fringe groovy-mode pinentry ob-async all-the-icons-dired gpastel common-lisp-snippets aggressive-indent graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
+    (edit-server ein ccls multi-term jupyter paradox fish-completion color-theme-modern cyberpunk-theme password-store rainbow-mode git-gutter-fringe groovy-mode pinentry ob-async all-the-icons-dired gpastel common-lisp-snippets aggressive-indent graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp lsp-mode auctex-latexmk markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
  '(paradox-github-token t)
  '(pdf-view-midnight-colors (quote ("#969896" . "#f8eec7")))
  '(preview-default-document-pt 12)
@@ -704,7 +720,7 @@ BEG and END default to the buffer boundaries."
 ;; Set default font
 (set-face-attribute 'default nil
                     :family "Input Mono"
-                    :height 100
+                    :height 120
                     :weight 'normal
                     :width 'normal)
 
@@ -733,26 +749,19 @@ BEG and END default to the buffer boundaries."
                                  (yas-minor-mode)
                                  (setq c-eldoc-cpp-command "/usr/bin/clang")
                                  (eldoc-mode)
-                                 (setq cquery-extra-init-params
-                                       '(:completion (:detailedLabel t)))
                                  (make-local-variable 'company-backends)
                                  (setq company-backends '((company-lsp)))
-                                 (lsp)
                                  ))
 
 
 (add-hook 'lsp-mode-hook 'lsp-ui-mode)
 (add-hook 'c++-mode-hook '(lambda ()
-                            (setq cquery-extra-init-params
-                                  '(:completion (:detailedLabel t)))
-                            (lsp)
                             (setq company-transformers nil
                                   company-lsp-async t
                                   company-lsp-cache-candidates nil)
                             (company-mode)
                             (make-local-variable 'company-backends)
                             (setq company-backends '((company-lsp)))
-                            (flycheck-mode)
                             ))
 
 (add-hook 'lisp-mode-hook
