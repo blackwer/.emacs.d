@@ -163,7 +163,13 @@
   :init
   (pdf-tools-install)
   (add-to-list 'auto-mode-alist '("\\.pdf\\'" . pdf-view-mode))
-  )
+  :config
+  (if (eq system-type 'darwin)
+      (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo")
+    (custom-set-variables
+     '(pdf-tools-handle-upgrades nil)) ; Use brew upgrade pdf-tools instead.
+    )
+  (menu-bar-mode -1))
 (use-package xelb
   :ensure t
   )
