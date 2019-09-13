@@ -50,8 +50,8 @@
   :config
   (setq ob-async-no-async-languages-alist '("jupyter-python" "jupyter-julia"))
   )
-(use-package jupyter
-  :ensure t)
+;; (use-package jupyter
+;;   :ensure nil)
 (use-package lsp-ui
   :ensure t
   :commands lsp-ui-mode)
@@ -266,7 +266,7 @@
                                (lisp . t)
                                (shell . t)
                                (python . t)
-                               (jupyter . t)
+                               ;; (jupyter . t)
                                ))
   (setq inferior-lisp-program (executable-find "sbcl"))
   (setq org-babel-python-command "python3")
