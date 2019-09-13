@@ -65,6 +65,8 @@
   :hook ((c-mode c++-mode objc-mode) .
          (lambda () (require 'ccls) (lsp)))
   )
+(use-package clang-format+
+  :ensure t)
 (use-package lsp-mode
   :ensure t
   :config
@@ -681,8 +683,9 @@ BEG and END default to the buffer boundaries."
  '(org-log-done (quote time))
  '(package-selected-packages
    (quote
-    (edit-server ein ccls multi-term jupyter paradox fish-completion color-theme-modern cyberpunk-theme password-store rainbow-mode git-gutter-fringe groovy-mode pinentry ob-async all-the-icons-dired gpastel common-lisp-snippets aggressive-indent graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest exwm xelb ob-sagemath ox-pandoc htmlize slime ob-clojurescript magit-todos magit-todo tide web-mode typescript-mode pdf-tools company-tern js2-refactor xref-js2 smartparens glsl-mode evil lsp-ui company-lsp lsp-mode auctex-latexmk markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow org light-soap-theme monokai-theme sunny-day-theme spacemacs-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
+    (clang-format+ edit-server ein fish-completion ccls paradox multi-term color-theme-modern cyberpunk-theme password-store rainbow-mode git-gutter-fringe groovy-mode pinentry ob-async all-the-icons-dired gpastel common-lisp-snippets aggressive-indent graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest desktop-environment exwm xelb ob-sagemath ox-pandoc htmlize ob-clojurescript magit-todos magit-todo typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow light-soap-theme monokai-theme sunny-day-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
  '(paradox-github-token t)
+ '(pdf-tools-handle-upgrades nil)
  '(pdf-view-midnight-colors (quote ("#969896" . "#f8eec7")))
  '(preview-default-document-pt 12)
  '(request-backend (quote url-retrieve))
@@ -754,6 +757,8 @@ BEG and END default to the buffer boundaries."
                                  (smartparens-mode)
                                  (yas-minor-mode)
                                  (setq c-eldoc-cpp-command "/usr/bin/clang")
+                                 (local-set-key (kbd "TAB") 'clang-format-region)
+                                 (local-set-key (kbd "C-M-\\") 'clang-format-region)
                                  (eldoc-mode)
                                  (make-local-variable 'company-backends)
                                  (setq company-backends '((company-lsp)))
