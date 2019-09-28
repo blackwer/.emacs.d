@@ -231,6 +231,9 @@
   :hook ((typescript-mode . tide-setup)
          (typescript-mode . tide-hl-identifier-mode)
          (before-save . tide-format-before-save)))
+(use-package company-tern
+  :init
+  :ensure t)
 (use-package cider
   :ensure t
   )
@@ -1037,6 +1040,13 @@ BEG and END default to the buffer boundaries."
 (require 'tern)
 (define-key tern-mode-keymap (kbd "M-.") nil)
 (define-key tern-mode-keymap (kbd "M-,") nil)
+
+(defun node-start-dev ()
+  "Toggle twee2 dev server"
+  (interactive)
+  (let ((default-directory (locate-dominating-file "." "package.json")))
+    (ansi-term "/home/rblack/.emacs.d/npm-dev.sh" "node-dev")
+    ))
 
 (add-to-list 'tramp-remote-path "~/.miniconda3/bin")
 
