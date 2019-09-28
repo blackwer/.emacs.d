@@ -1042,10 +1042,10 @@ BEG and END default to the buffer boundaries."
 (define-key tern-mode-keymap (kbd "M-,") nil)
 
 (defun node-start-dev ()
-  "Toggle twee2 dev server"
+  "Toggle node dev server"
   (interactive)
   (let ((default-directory (locate-dominating-file "." "package.json")))
-    (ansi-term "/home/rblack/.emacs.d/npm-dev.sh" "node-dev")
+    (ansi-term (concat (getenv "HOME") "/.emacs.d/npm-dev.sh") "node-dev")
     ))
 
 (add-to-list 'tramp-remote-path "~/.miniconda3/bin")
