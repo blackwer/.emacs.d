@@ -173,7 +173,7 @@
     )
   (menu-bar-mode -1))
 (use-package xelb
-  :ensure t
+  :disabled
   )
 (use-package exwm
   :disabled
@@ -686,7 +686,7 @@ BEG and END default to the buffer boundaries."
  '(org-log-done (quote time))
  '(package-selected-packages
    (quote
-    (clang-format+ edit-server ein fish-completion ccls paradox multi-term color-theme-modern cyberpunk-theme password-store rainbow-mode git-gutter-fringe groovy-mode pinentry ob-async all-the-icons-dired gpastel common-lisp-snippets aggressive-indent graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest desktop-environment exwm xelb ob-sagemath ox-pandoc htmlize ob-clojurescript magit-todos magit-todo typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow light-soap-theme monokai-theme sunny-day-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
+    (clang-format+ edit-server ein fish-completion ccls paradox multi-term color-theme-modern cyberpunk-theme password-store rainbow-mode git-gutter-fringe groovy-mode pinentry ob-async all-the-icons-dired gpastel common-lisp-snippets aggressive-indent graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest desktop-environment exwm ob-sagemath ox-pandoc htmlize ob-clojurescript magit-todos magit-todo typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow light-soap-theme monokai-theme sunny-day-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
  '(paradox-github-token t)
  '(pdf-tools-handle-upgrades nil)
  '(pdf-view-midnight-colors (quote ("#969896" . "#f8eec7")))
@@ -699,6 +699,7 @@ BEG and END default to the buffer boundaries."
            (org-babel-execute-src-block)))))
  '(send-mail-function (quote smtpmail-send-it))
  '(show-paren-mode t)
+ '(slurm-filter-user-at-start nil)
  '(smtpmail-smtp-server "smtp-auth.fau.de")
  '(smtpmail-smtp-service 25)
  '(tab-width 4)
@@ -821,20 +822,6 @@ BEG and END default to the buffer boundaries."
 (push '(undo discard-info) warning-suppress-types)
 (setq split-height-threshold 1200)
 (setq split-width-threshold 2000)
-
-(defun gtags-root-dir ()
-  "Returns GTAGS root directory or nil if doesn't exist."
-  (with-temp-buffer
-    (if (zerop (call-process "global" nil t nil "-pr"))
-        (buffer-substring (point-min) (1- (point-max)))
-      nil)))
-(defun gtags-update ()
-  "Make GTAGS incremental update"
-  (call-process "global" nil nil nil "-u"))
-(defun gtags-update-hook ()
-  (when (gtags-root-dir)
-    (gtags-update)))
-(add-hook 'after-save-hook #'gtags-update-hook)
 
 ;; Mode line setup
 (column-number-mode t)
@@ -1154,6 +1141,6 @@ BEG and END default to the buffer boundaries."
  ;; If there is more than one, they won't work right.
  )
 
-
-(setq gc-cons-threshold 16777216
-      gc-cons-percentage 0.1)
+(add-to-list 'load-path "~/.emacs.d/lisp/slurm.el")
+(require 'slurm-mode)
+(require 'slurm-script-mode)
