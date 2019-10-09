@@ -1,18 +1,21 @@
-(setq gc-cons-threshold 402653184
-      gc-cons-percentage 0.6)
-
 (server-start)
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 
 (require 'package) ;; Load package manager
 (setq package-enable-at-startup nil)   ; To prevent initialising twice
 
-;; Add the Marmalade repo
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives
-             '("melpa-stable" . "https://melpa.org/packages/") t)
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+(setq package-archives
+      '(("GNU ELPA"     . "https://elpa.gnu.org/packages/")
+        ("MELPA Stable" . "https://stable.melpa.org/packages/")
+        ("MELPA"        . "https://melpa.org/packages/")
+        ("org" . "http://orgmode.org/elpa/"))
+
+      package-archive-priorities
+      '(("MELPA Stable" . 10)
+        ("GNU ELPA"     . 5)
+        ("MELPA"        . 0)
+        ("org" . 20)))
+
 
 (package-initialize)
 
