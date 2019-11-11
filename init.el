@@ -13,7 +13,7 @@
       package-archive-priorities
       '(("MELPA Stable" . 10)
         ("GNU ELPA"     . 5)
-        ("MELPA"        . 0)
+        ("MELPA"        . 15)
         ("org" . 20)))
 
 
@@ -27,13 +27,21 @@
 
 (eval-when-compile
   (require 'use-package))
+(use-package ibuffer-projectile
+  :ensure t)
 (use-package multi-term
   :ensure t
   :config
   (add-to-list 'term-bind-key-alist (cons "M-1" 'term-send-raw-meta))
   (add-to-list 'term-bind-key-alist (cons "M-2" 'term-send-raw-meta))
   (add-to-list 'term-bind-key-alist (cons "M-3" 'term-send-raw-meta))
+  (add-to-list 'term-bind-key-alist (cons "M-4" 'term-send-raw-meta))
+  (add-to-list 'term-bind-key-alist (cons "M-5" 'term-send-raw-meta))
+  (add-to-list 'term-bind-key-alist (cons "C-z" 'term-send-raw))
   (add-to-list 'term-bind-key-alist (cons "M-DEL" 'term-send-raw-meta))
+  (global-set-key (kbd "C-c C-t") 'multi-term-next)
+  (global-set-key (kbd "C-c t") 'multi-term-prev)
+  (global-set-key (kbd "C-c T") 'multi-term)
   )
 (use-package paradox
   :ensure t)
@@ -64,7 +72,7 @@
 (use-package ccls
   :ensure t
   :config
-  (setq ccls-executable "~/.emacs.d/ccls.sh")
+  (setq ccls-executable "ccls")
   :hook ((c-mode c++-mode objc-mode) .
          (lambda () (require 'ccls) (lsp)))
   )
@@ -91,7 +99,7 @@
   (defun my-python-before-save-hook ()
     (when (eq major-mode 'python-mode)
       (elpy-black-fix-code)))
-
+  (add-hook 'elpy-mode-hook (lambda () (highlight-indentation-mode -1)))
   (add-hook 'before-save-hook #'my-python-before-save-hook)
 
   (defun company-yasnippet-or-completion ()
@@ -166,7 +174,9 @@
 (use-package pdf-tools
   :ensure t
   :init
-  (pdf-tools-install)
+  (custom-set-variables
+     '(pdf-tools-handle-upgrades nil))
+  ;; (pdf-tools-install)
   (add-to-list 'auto-mode-alist '("\\.pdf\\'" . pdf-view-mode))
   :config
   (if (eq system-type 'darwin)
@@ -176,12 +186,13 @@
     )
   (menu-bar-mode -1))
 (use-package xelb
-  :disabled
+  ;; :disabled
+  :ensure
   )
 (use-package exwm
-  :disabled
+  :ensure
   :config
-  (if (equal system-name "Pilgrim")
+  (if (equal system-name "scclin016")
       (progn
         (require 'exwm-randr)
         (setq exwm-randr-workspace-output-plist '(0 "DP-2" 1 "DP-0"))
@@ -689,7 +700,7 @@ BEG and END default to the buffer boundaries."
  '(org-log-done (quote time))
  '(package-selected-packages
    (quote
-    (clang-format+ edit-server ein fish-completion ccls paradox multi-term color-theme-modern cyberpunk-theme password-store rainbow-mode git-gutter-fringe groovy-mode pinentry ob-async all-the-icons-dired gpastel common-lisp-snippets aggressive-indent graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest desktop-environment exwm ob-sagemath ox-pandoc htmlize ob-clojurescript magit-todos magit-todo typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow light-soap-theme monokai-theme sunny-day-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
+    (helm-exwm ibuffer-projectile xelb clang-format+ edit-server ein fish-completion ccls paradox multi-term color-theme-modern cyberpunk-theme password-store rainbow-mode git-gutter-fringe groovy-mode pinentry ob-async all-the-icons-dired gpastel common-lisp-snippets aggressive-indent graphviz-dot-mode helm-themes paredit rainbow-delimiters cider helm-swoop swiper helm-company helm-ag helm-ls-git yaml-mode yasnippet esh-autosuggest desktop-environment exwm ob-sagemath ox-pandoc htmlize ob-clojurescript magit-todos magit-todo typescript-mode notmuch pdf-tools company-tern js2-refactor xref-js2 glsl-mode evil lsp-ui company-lsp cquery lsp-mode auctex-latexmk markdown-mode fortpy imenu-anywhere github-theme color-theme-sanityinc-solarized color-theme-sanityinc-tomorrow light-soap-theme monokai-theme sunny-day-theme zenburn-theme magit google-this leuven-theme wttrin use-package org-download multiple-cursors dired-sidebar auctex)))
  '(paradox-github-token t)
  '(pdf-tools-handle-upgrades nil)
  '(pdf-view-midnight-colors (quote ("#969896" . "#f8eec7")))
@@ -736,7 +747,7 @@ BEG and END default to the buffer boundaries."
 ;; Set default font
 (set-face-attribute 'default nil
                     :family "Input Mono"
-                    :height 120
+                    :height 100
                     :weight 'normal
                     :width 'normal)
 
@@ -773,6 +784,7 @@ BEG and END default to the buffer boundaries."
 
 
 (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+(add-to-list 'auto-mode-alist '("\\.txx\\'" . c++-mode))
 (add-hook 'c++-mode-hook '(lambda ()
                             (setq company-transformers nil
                                   company-lsp-async t
@@ -893,10 +905,12 @@ BEG and END default to the buffer boundaries."
 
 (set-face-attribute 'mode-line nil
                     ;; :foreground "gray60" :background "gray20"
+                    :background "grey40"
                     :inverse-video nil
                     :box '(:line-width 2 :color "gray20" :style nil))
 (set-face-attribute 'mode-line-inactive nil
                     ;; :foreground "gray80" :background "gray40"
+                    :background "grey20"
                     :inverse-video nil
                     :box '(:line-width 2 :color "gray40" :style nil))
 
