@@ -3,6 +3,7 @@
 (setq custom-file (locate-user-emacs-file "custom.el"))
 (load custom-file :no-error-if-file-is-missing)
 
+
 ;;; Set up the package manager
 
 (require 'package)
@@ -20,6 +21,7 @@
              '("\\`\\*\\(Warnings\\|Compile-Log\\)\\*\\'"
                (display-buffer-no-window)
                (allow-no-window . t)))
+
 
 ;;; Basic behaviour
 
@@ -53,6 +55,7 @@ The DWIM behaviour of this command is as follows:
 
 (define-key global-map (kbd "C-g") #'prot/keyboard-quit-dwim)
 
+
 ;;; Tweak the looks of Emacs
 
 (let ((mono-spaced-font "Monospace")
@@ -66,10 +69,12 @@ The DWIM behaviour of this command is as follows:
   :config
   (load-theme 'modus-vivendi-tinted :no-confirm-loading))
 
-;; Remember to do M-x and run `nerd-icons-install-fonts' to get the
-;; font files.  Then restart Emacs to see the effect.
+
 (use-package nerd-icons
-  :ensure t)
+  :ensure t
+  ;; Need to run `nerd-icons-install-fonts' to get the
+  ;; font files
+  )
 
 (use-package nerd-icons-completion
   :ensure t
@@ -87,6 +92,7 @@ The DWIM behaviour of this command is as follows:
   :ensure t
   :hook
   (dired-mode . nerd-icons-dired-mode))
+
 
 ;;; Configure the minibuffer and completions
 
@@ -224,8 +230,7 @@ The DWIM behaviour of this command is as follows:
 
 (use-package lsp-mode
   :ensure t
-  :hook ((c-mode c++-mode objc-mode haskell-mode) .
-         (lambda () (lsp)))
+  :hook ((c-mode c++-mode) . (lambda () (lsp)))
 
   :custom
   (lsp-keymap-prefix "C-c l")           ; Prefix for LSP actions
@@ -240,18 +245,10 @@ The DWIM behaviour of this command is as follows:
   (lsp-auto-configure t)                ; Used to decide between current active servers
   (lsp-eldoc-enable-hover t)            ; Display signature information in the echo area
   (lsp-enable-dap-auto-configure t)     ; Debug support
-  ;; (lsp-enable-file-watchers nil)
-  ;; (lsp-enable-folding nil)              ; I disable folding since I use origami
   (lsp-enable-imenu t)
-  ;; (lsp-enable-indentation nil)          ; I use prettier
   (lsp-enable-links nil)                ; No need since we have `browse-url'
-  ;; (lsp-enable-on-type-formatting nil)   ; Prettier handles this
-  ;; (lsp-enable-suggest-server-download t) ; Useful prompt to download LSP providers
   (lsp-enable-symbol-highlighting t)     ; Shows usages of symbol at point in the current buffer
-  ;; (lsp-enable-text-document-color nil)   ; This is Treesitter's job
-
   (lsp-ui-sideline-show-hover nil)      ; Sideline used only for diagnostics
-  ;; (lsp-ui-sideline-diagnostic-max-lines 20) ; 20 lines since typescript errors can be quite big
   ;; completion
   (lsp-completion-enable t)
   (lsp-completion-enable-additional-text-edit t) ; Ex: auto-insert an import for a completion candidate
@@ -269,10 +266,6 @@ The DWIM behaviour of this command is as follows:
   (lsp-signature-doc-lines 1)                ; Don't raise the echo area. It's distracting
   (lsp-ui-doc-use-childframe t)              ; Show docs for symbol at point
   (lsp-eldoc-render-all nil)            ; This would be very useful if it would respect `lsp-signature-doc-lines', currently it's distracting
-  ;; ;; lens
-  ;; (lsp-lens-enable nil)                 ; Optional, I don't need it
-  ;; semantic
-  (lsp-semantic-tokens-enable nil)      ; Related to highlighting, and we defer to treesitter
   )
 
 (use-package lsp-ui)
@@ -296,8 +289,7 @@ The DWIM behaviour of this command is as follows:
 (use-package magit-todos
   :ensure t
   :config
-  (magit-todos-mode t)
-  )
+  (magit-todos-mode t))
 
 (use-package smartparens
   :ensure t)
@@ -310,11 +302,13 @@ The DWIM behaviour of this command is as follows:
 (global-set-key (kbd "C-x T") #'(lambda () (interactive) (eshell 't)))
 (global-set-key (kbd "M-z") 'zap-up-to-char)
 
+
 ;;; Let me kill buffers and downcase shit
 
 (put 'erase-buffer 'disabled nil)
 (put 'upcase-region 'disabled nil)
 (put 'downcase-region 'disabled nil)
+
 
 ;;; Misc utility
 
@@ -333,7 +327,8 @@ The DWIM behaviour of this command is as follows:
   (interactive)
   (shell-command-on-region (region-beginning) (region-end) "xclip -selection primary &> /dev/null"))
 
-;; Misc config
+
+;;; Misc config
 
 (global-subword-mode t)
 (column-number-mode t)
