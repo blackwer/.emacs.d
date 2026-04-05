@@ -1,1 +1,7 @@
-session.*
+/.lsp-session*
+/auto-save-list
+/eln-cache
+/elpa
+/history
+/saves
+
